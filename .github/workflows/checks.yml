@@ -94,4 +94,10 @@ jobs:
           disk-size: 8192M
           ram-size: 2048M
           disable-animations: true
-          script: flutter test integration_test/app_test.dart --flavor dev -d emulator-5554 --reporter expanded
+          script: bash tools/run_android_integration.sh emulator-5554
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: device-diagnostics
+          path: artifacts/
+          retention-days: 3
