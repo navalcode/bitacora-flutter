@@ -5,7 +5,7 @@
   },
   {
     "path": ".gitignore",
-    "sha256": "4a8d984279954e0461e0ffef9b9e7455340a0a762f227c01065a53482a83a4f1"
+    "sha256": "3f62a3b23c37dc89fcae5919312f3a1b42c1be01be1e14198c63b11029c71ae7"
   },
   {
     "path": "LICENSE",
@@ -13,11 +13,11 @@
   },
   {
     "path": "README.es.md",
-    "sha256": "a26cace36b4ef2dc5e79354a296dc78b4e402ba95b1bc5132ab34997e665b69c"
+    "sha256": "35f5ff337cb142f51774abfc54d8791cc5660f9e129c3c3df15a94e37e3450b5"
   },
   {
     "path": "README.md",
-    "sha256": "d8b7d349fe366f6cd3cb1656ce81fd8ac616bf5ec14b4399400f18ac3982eed5"
+    "sha256": "dc7dce10cac15d2443406ecbe735cde87c5bd5d7d53cdeb3b889f6f05df87851"
   },
   {
     "path": "THIRD_PARTY.md",
