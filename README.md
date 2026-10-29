@@ -1,6 +1,6 @@
 # Bitácora
 
-[Español](README.es.md)
+[Español](README.es.md) · [![CI](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml/badge.svg)](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml)
 
 An original Flutter field-task demo for inspecting async state, failure recovery and local persistence. Six fictional tasks support search, pending/completed filters, details and completion saved on the device.
 
@@ -67,7 +67,7 @@ Local validation on 29 October 2026: **17 controller tests, five widget tests an
 
 Manual browser review covered detail, completion, filtering, reload persistence and source failure/recovery. Release artifact analysis measured 0.95 MB DEX with aligned native libraries and no advisory-tool warnings. This is not store approval. iOS and physical devices have not been validated.
 
-[CI passed on GitHub](https://github.com/navalcode/bitacora-flutter/actions/runs/40874563980): analyzer and 22 tests, Android dev/prod builds, optimized prod bundle, web build and the native API 35 emulator journey. Local native checks used API 37.
+[GitHub Actions](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml): analyzer and 22 tests, Android dev/prod builds, optimized prod bundle, web build and the native API 35 emulator journey. Local native checks used API 37.
 
 ## License
 
