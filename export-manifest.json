@@ -1,11 +1,11 @@
 [
   {
     "path": ".github/workflows/checks.yml",
-    "sha256": "bedac61456a1f1fc2fbf1b0b6ed37717a614f4116205455c731d8d1f0a548a61"
+    "sha256": "c1a323cb281cc5f4606332affc86303b9e5d29b82cc09b0ad5608490fdae0987"
   },
   {
     "path": ".gitignore",
-    "sha256": "3f62a3b23c37dc89fcae5919312f3a1b42c1be01be1e14198c63b11029c71ae7"
+    "sha256": "a499553c53e4fd0bd23eee6a015836c112c60b0033ac51d084169f287a918c5a"
   },
   {
     "path": "LICENSE",
@@ -13,11 +13,11 @@
   },
   {
     "path": "README.es.md",
-    "sha256": "35f5ff337cb142f51774abfc54d8791cc5660f9e129c3c3df15a94e37e3450b5"
+    "sha256": "7a635a123ed6b53316be985685bb121bc47f75199929f853f0f99fafc77d5f65"
   },
   {
     "path": "README.md",
-    "sha256": "dc7dce10cac15d2443406ecbe735cde87c5bd5d7d53cdeb3b889f6f05df87851"
+    "sha256": "b5c26f35a84385714167ca633cd202024745be61b4704ce8f5974068e15e3a77"
   },
   {
     "path": "THIRD_PARTY.md",
@@ -113,7 +113,7 @@
   },
   {
     "path": "integration_test/app_test.dart",
-    "sha256": "ac561515535f45be9666649d92030a0fb96c926c972b11ef7685a0b5aadc712c"
+    "sha256": "865faa34d22165565b407a8a8fe595c8735fa92ed3396a455bea084d6d4301f9"
   },
   {
     "path": "lib/data/completion_preferences.dart",
@@ -166,6 +166,10 @@
   {
     "path": "third_party/gradle-NOTICE.txt",
     "sha256": "c2de5fd9adc7ccc4e1382a0e1f38ec6e14f8ca6e28d3c20289fe80353b019aa1"
+  },
+  {
+    "path": "tools/run_android_integration.sh",
+    "sha256": "38389749885f74e80696944dc398c4a1e9184c4aeb061f82b4501017bbb3c42d"
   },
   {
     "path": "web/favicon.svg",

@@ -45,7 +45,7 @@ Connected test and screenshot commands (replace the device ID):
 
 ```sh
 flutter test integration_test/app_test.dart --flavor dev -d emulator-5554
-flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --flavor dev -d emulator-5554 --keep-app-running
+flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d emulator-5554 --keep-app-running
 ```
 
 The integration journey resets this demo's completion IDs and leaves one fictional task completed. The capture driver writes the two reviewed PNGs in `docs/images/`.
@@ -72,3 +72,5 @@ Manual browser review covered detail, completion, filtering, reload persistence 
 ## License
 
 Original application code, copy, data and vector artwork: [MIT](LICENSE), copyright 2026 Manuel Naval. Flutter/platform shells and dependencies retain their licenses; see [third-party notices](THIRD_PARTY.md).
+
+Native CI runs the persistence journey without screenshot-surface conversion. Screenshot capture is opt-in through the documented define and driver. `tools/run_android_integration.sh` is a Linux CI wrapper with an explicit emulator serial, bounded execution and filtered crash/launch diagnostics; it never retries or suppresses a failing result.

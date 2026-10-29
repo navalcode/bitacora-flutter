@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  const captureScreenshots = bool.fromEnvironment('CAPTURE_SCREENSHOTS');
   testWidgets('native preferences survive disposal and a fresh controller', (
     tester,
   ) async {
@@ -23,8 +24,10 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await binding.convertFlutterSurfaceToImage();
-    await tester.pump();
+    if (captureScreenshots) {
+      await binding.convertFlutterSurfaceToImage();
+      await tester.pump();
+    }
     await tester.scrollUntilVisible(
       find.byKey(const ValueKey('task-alba')),
       150,
@@ -39,7 +42,7 @@ void main() {
     await model.setCompleted('alba', true);
     await tester.pumpAndSettle();
     expect(find.text('Mark pending'), findsOneWidget);
-    await binding.takeScreenshot('detail');
+    if (captureScreenshots) await binding.takeScreenshot('detail');
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
 
@@ -61,7 +64,7 @@ void main() {
     restored.filterChanged(TaskFilter.pending);
     await tester.pumpAndSettle();
     expect(restored.visible('en'), hasLength(5));
-    await binding.takeScreenshot('board');
+    if (captureScreenshots) await binding.takeScreenshot('board');
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
     // Leave this one fictional completion for a separate process-restart smoke check.

@@ -45,7 +45,7 @@ Prueba conectada y capturas, sustituyendo el identificador del dispositivo:
 
 ```sh
 flutter test integration_test/app_test.dart --flavor dev -d emulator-5554
-flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --flavor dev -d emulator-5554 --keep-app-running
+flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d emulator-5554 --keep-app-running
 ```
 
 El recorrido reinicia los IDs de esta demo y deja una tarea ficticia completada. El driver guarda los dos PNG revisados en `docs/images/`.
@@ -72,3 +72,5 @@ La revisión manual web cubre detalle, completar, filtros, persistencia tras rec
 ## Licencia
 
 Código, textos, datos e ilustraciones vectoriales originales: [MIT](LICENSE), copyright 2026 Manuel Naval. [Avisos de terceros](THIRD_PARTY.md) conserva las licencias de Flutter, plantillas y dependencias.
+
+La CI nativa ejecuta persistencia sin convertir la superficie para capturas. Las capturas requieren el define y driver documentados. `tools/run_android_integration.sh` es un wrapper Linux de CI, con serial explícito, ejecución acotada y diagnóstico filtrado; no reintenta ni oculta un resultado fallido.
