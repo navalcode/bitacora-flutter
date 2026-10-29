@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# This reviewed demo targets Android/web; generated iOS shell is unvalidated.
+/ios/
+/.metadata

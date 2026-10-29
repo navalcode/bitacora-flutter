@@ -67,7 +67,7 @@ Local validation on 29 October 2026: **17 controller tests, five widget tests an
 
 Manual browser review covered detail, completion, filtering, reload persistence and source failure/recovery. Release artifact analysis measured 0.95 MB DEX with aligned native libraries and no advisory-tool warnings. This is not store approval. iOS and physical devices have not been validated.
 
-The prepared CI checks analyzer/tests, Android flavors/release, web and a native emulator journey. Its remote result will be recorded separately; a workflow file alone does not establish success.
+[CI passed on GitHub](https://github.com/navalcode/bitacora-flutter/actions/runs/40874563980): analyzer and 22 tests, Android dev/prod builds, optimized prod bundle, web build and the native API 35 emulator journey. Local native checks used API 37.
 
 ## License
 

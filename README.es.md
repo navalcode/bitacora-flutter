@@ -67,7 +67,7 @@ El 29 de octubre de 2026 pasan **17 tests del controlador, cinco de widgets y un
 
 La revisión manual web cubre detalle, completar, filtros, persistencia tras recarga y fallo/recuperación. La auditoría consultiva del AAB mide 0,95 MB DEX, alineación nativa correcta y ninguna advertencia. No equivale a aprobación de tienda. No se ha validado iOS ni un dispositivo físico.
 
-La CI preparada comprueba analyzer/tests, flavors/release Android, web y un recorrido en emulador. El resultado remoto se registra por separado; un workflow escrito no acredita éxito.
+[CI correcta en GitHub](https://github.com/navalcode/bitacora-flutter/actions/runs/40874563980): analyzer, 22 tests, builds dev/prod Android, bundle prod optimizado, web y recorrido nativo en emulador API35. Las pruebas nativas locales usaron API37.
 
 ## Licencia
 
