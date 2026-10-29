@@ -8,3 +8,9 @@ The MIT license covers original application code, task fixtures, copy and vector
 - Material icon fonts, test tools and transitive packages retain their own notices. `pubspec.lock` records the resolved dependency versions. Runtime Flutter license information is available through the framework's license registry.
 
 No corporate image, prompt, configuration or private history is included in this application.
+
+## Outfit typeface
+
+Outfit is copyright 2021 The Outfit Project Authors and distributed under SIL Open Font License 1.1. Static font instances were produced with fontTools from the official Google Fonts variable source. The full upstream notice is included as the bundled `assets/licenses/Outfit-OFL.txt`; copyright and license metadata remain in the font files. This dependency is not relicensed under the application's MIT license.
+
+Typeface sources: [Outfit](https://github.com/google/fonts/tree/main/ofl/outfit).

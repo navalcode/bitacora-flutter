@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'data/completion_preferences.dart';
 import 'domain/tasks.dart';
 import 'l10n/copy.dart';
+import 'ui/app_theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -53,10 +54,16 @@ class _BitacoraAppState extends State<BitacoraApp> {
     supportedLocales: const [Locale('es'), Locale('en')],
     localeResolutionCallback: (locale, _) =>
         Locale(locale?.languageCode == 'es' ? 'es' : 'en'),
-    theme: ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xff245744)),
-      scaffoldBackgroundColor: const Color(0xfff5f4ee),
+    theme: buildBitacoraTheme(),
+    builder: (context, child) => ColoredBox(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 860),
+          child: child ?? const SizedBox.shrink(),
+        ),
+      ),
     ),
     home: TaskBoard(model: widget.model, environment: widget.environment),
   );
@@ -91,24 +98,6 @@ class _TaskBoardState extends State<TaskBoard> {
         appBar: AppBar(
           title: const Text('Bitácora'),
           actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
-                ),
-                child: Text(
-                  '${copy(context, CopyKey.demo)} · ${widget.environment.name}',
-                ),
-              ),
-            ),
             PopupMenuButton<DemoScenario>(
               tooltip: copy(context, CopyKey.scenario),
               icon: const Icon(Icons.science_outlined),
@@ -133,12 +122,23 @@ class _TaskBoardState extends State<TaskBoard> {
                 header: true,
                 child: Text(
                   copy(context, CopyKey.subtitle),
-                  style: Theme.of(context).textTheme.headlineMedium,
+                  style: Theme.of(context).textTheme.headlineSmall,
                 ),
               ),
               const SizedBox(height: 12),
-              Text(
-                '${copy(context, CopyKey.completedCount)}: ${model.completed.length} / ${model.items.length}',
+              Wrap(
+                spacing: 20,
+                runSpacing: 4,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  Text(
+                    '${copy(context, CopyKey.completedCount)}: ${model.completed.length} / ${model.items.length}',
+                  ),
+                  Text(
+                    '${copy(context, CopyKey.demo)} · ${widget.environment.name}',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ],
               ),
               const SizedBox(height: 20),
               TextField(
@@ -148,9 +148,6 @@ class _TaskBoardState extends State<TaskBoard> {
                 decoration: InputDecoration(
                   labelText: copy(context, CopyKey.search),
                   prefixIcon: const Icon(Icons.search),
-                  border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -215,31 +212,32 @@ class _TaskBoardState extends State<TaskBoard> {
                   ),
                 ),
               ...tasks.map(
-                (task) => Card(
-                  margin: const EdgeInsets.symmetric(vertical: 6),
-                  child: ListTile(
-                    key: ValueKey('task-${task.id}'),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    leading: Semantics(
-                      label: task.title(language),
-                      child: Checkbox(
-                        key: ValueKey('complete-${task.id}'),
-                        value: model.completed.contains(task.id),
-                        onChanged: !model.storageReady || model.saving
-                            ? null
-                            : (value) => unawaited(
-                                model.setCompleted(task.id, value!),
-                              ),
+                (task) => Column(
+                  children: [
+                    ListTile(
+                      key: ValueKey('task-${task.id}'),
+                      leading: Semantics(
+                        label: task.title(language),
+                        child: Checkbox(
+                          key: ValueKey('complete-${task.id}'),
+                          value: model.completed.contains(task.id),
+                          onChanged: !model.storageReady || model.saving
+                              ? null
+                              : (value) => unawaited(
+                                  model.setCompleted(task.id, value!),
+                                ),
+                        ),
                       ),
+                      title: Text(task.title(language)),
+                      subtitle: Text(copy(context, areaKey(task.area))),
+                      trailing: const Icon(Icons.chevron_right),
+                      onTap: () => open(task.id),
                     ),
-                    title: Text(task.title(language)),
-                    subtitle: Text(copy(context, areaKey(task.area))),
-                    trailing: const Icon(Icons.arrow_forward),
-                    onTap: () => open(task.id),
-                  ),
+                    Divider(
+                      height: 1,
+                      color: Theme.of(context).colorScheme.outlineVariant,
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 20),
@@ -282,16 +280,6 @@ class TaskDetail extends StatelessWidget {
               if (task == null)
                 Text(copy(context, CopyKey.missing))
               else ...[
-                Icon(
-                  switch (task.area) {
-                    TaskArea.observe => Icons.visibility_outlined,
-                    TaskArea.review => Icons.fact_check_outlined,
-                    TaskArea.maintain => Icons.construction_outlined,
-                  },
-                  size: 76,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: 24),
                 Semantics(
                   header: true,
                   child: Text(
@@ -300,7 +288,21 @@ class TaskDetail extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                Text(copy(context, areaKey(task.area))),
+                Row(
+                  children: [
+                    Icon(
+                      switch (task.area) {
+                        TaskArea.observe => Icons.visibility_outlined,
+                        TaskArea.review => Icons.fact_check_outlined,
+                        TaskArea.maintain => Icons.construction_outlined,
+                      },
+                      size: 20,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(child: Text(copy(context, areaKey(task.area)))),
+                  ],
+                ),
                 const SizedBox(height: 24),
                 Text(
                   task.detail(language),
@@ -352,16 +354,28 @@ class Notice extends StatelessWidget {
   final String action;
   final VoidCallback onAction;
   @override
-  Widget build(BuildContext context) => Card(
-    color: Theme.of(context).colorScheme.secondaryContainer,
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(text),
-          TextButton(onPressed: onAction, child: Text(action)),
-        ],
+  Widget build(BuildContext context) => Semantics(
+    liveRegion: true,
+    child: Container(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.secondaryContainer,
+        border: Border(
+          left: BorderSide(
+            color: Theme.of(context).colorScheme.primary,
+            width: 3,
+          ),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(text),
+            TextButton(onPressed: onAction, child: Text(action)),
+          ],
+        ),
       ),
     ),
   );

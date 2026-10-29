@@ -31,7 +31,7 @@ enum CopyKey {
 
 const translations = <String, Map<CopyKey, String>>{
   'en': {
-    CopyKey.subtitle: 'Your field plan, close at hand',
+    CopyKey.subtitle: 'Your field tasks',
     CopyKey.search: 'Search tasks',
     CopyKey.all: 'All',
     CopyKey.pending: 'Pending',
@@ -61,7 +61,7 @@ const translations = <String, Map<CopyKey, String>>{
     CopyKey.maintain: 'Prepare',
   },
   'es': {
-    CopyKey.subtitle: 'Tu plan de campo, a mano',
+    CopyKey.subtitle: 'Tus tareas de campo',
     CopyKey.search: 'Buscar tareas',
     CopyKey.all: 'Todas',
     CopyKey.pending: 'Pendientes',

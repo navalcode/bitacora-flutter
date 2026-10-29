@@ -104,6 +104,45 @@ void main() {
   });
 
   testWidgets(
+    'resizing a detail preserves its route and acknowledged completion',
+    (tester) async {
+      tester.view.physicalSize = const Size(1280, 800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      final store = MemoryStore();
+      final model = TaskController(ImmediateSource(), store);
+      await model.initialize();
+      await tester.pumpWidget(
+        BitacoraApp(
+          model: model,
+          environment: AppEnvironment.dev,
+          locale: const Locale('en'),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await showItem(tester, find.byKey(const ValueKey('task-alba')));
+      await tester.tap(find.text('Check Alba lookout'));
+      await tester.pumpAndSettle();
+      tester.view.physicalSize = const Size(360, 800);
+      await tester.pumpAndSettle();
+      await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+      await tester.tap(find.byKey(const ValueKey('detail-complete')));
+      await tester.pumpAndSettle();
+      expect(store.ids, {'alba'});
+      expect(find.text('Mark pending'), findsOneWidget);
+      tester.view.physicalSize = const Size(1280, 800);
+      await tester.pumpAndSettle();
+      expect(find.text('Mark pending'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      await showItem(tester, find.text('Completed: 1 / 6'), step: -150);
+      expect(find.text('Completed: 1 / 6'), findsOneWidget);
+    },
+  );
+
+  testWidgets(
     'narrow viewport and large text keep the board and detail usable',
     (tester) async {
       tester.view.physicalSize = const Size(360, 800);

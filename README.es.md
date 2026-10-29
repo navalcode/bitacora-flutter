@@ -10,7 +10,11 @@ Los flavors `dev` y `prod` son de demostración. No necesita cuentas, API keys, 
 |---|---|
 | ![Tareas pendientes](docs/images/board.png) | ![Tarea guardada](docs/images/detail.png) |
 
-Capturas reales de emulador API 37 generadas durante el recorrido de integración.
+Capturas reales del emulador API 37 de la app normal rediseñada, tras guardar una tarea ficticia. No son conceptos generados. La interfaz capturada está en inglés.
+
+## Diseño de interfaz
+
+[DESIGN.md](DESIGN.md) explica la estructura orientada a tareas: lista plana, completar/abrir detalle independientes, contador útil, búsqueda etiquetada y texto adaptable. Los avisos son live region. Outfit está empaquetada con el aviso OFL completo; no hay petición a un CDN de fuentes al abrir la app.
 
 ## Probar
 
@@ -63,11 +67,11 @@ El recorrido reinicia los IDs de esta demo y deja una tarea ficticia completada.
 
 ## Alcance verificado
 
-El 29 de octubre de 2026 pasan **17 tests del controlador, cinco de widgets y un recorrido de persistencia nativa**. Analyzer no tiene avisos. Se comprueban 360×800 y texto 1,8. Se generan APK debug dev/prod, AAB prod release y web. El arranque normal Android conserva la tarea tras sustituir el APK y reiniciar el proceso.
+El 29 de octubre de 2026 pasan **17 tests del controlador, seis de widgets y un recorrido de persistencia nativa**. Analyzer no tiene avisos. Se comprueban 360×800 y texto 1,8. Se generan APK debug dev/prod, AAB prod release y web. El arranque normal Android conserva la tarea tras sustituir el APK y reiniciar el proceso.
 
-La revisión manual web cubre detalle, completar, filtros, persistencia tras recarga y fallo/recuperación. La auditoría consultiva del AAB mide 0,95 MB DEX, alineación nativa correcta y ninguna advertencia. No equivale a aprobación de tienda. No se ha validado iOS ni un dispositivo físico.
+La revisión visual vuelve a comprobar analyzer y los 23 tests, recorrido de preferencias nativas, completar/reiniciar la app normal, español/inglés, fallo simulado y texto 1,8 a 360 × 800. Compilan APK dev debug y prod release, y la web. Los builds previos dev/prod debug, AAB release y pruebas de navegador conservan su alcance histórico. El APK release actual mide 0,95 MB DEX y alineación nativa/ZIP de 16 KB, con advertencia de metadatos R8 no disponibles. No equivale a aprobación de tienda. No se ha validado iOS ni un dispositivo físico.
 
-[GitHub Actions](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml): analyzer, 22 tests, builds dev/prod Android, bundle prod optimizado, web y recorrido nativo en emulador API35. Las pruebas nativas locales usaron API37.
+[GitHub Actions](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml): analyzer y la suite completa, builds dev/prod Android, bundle prod optimizado, web y recorrido nativo en emulador API35. Las pruebas nativas locales usaron API37.
 
 ## Licencia
 
