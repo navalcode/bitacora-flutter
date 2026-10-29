@@ -1,0 +1,19 @@
+{
+  "name": "Bitácora",
+  "short_name": "Bitácora",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f5f4ee",
+  "theme_color": "#245744",
+  "description": "Original offline field-task demonstration.",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

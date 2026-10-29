@@ -1,0 +1,182 @@
+[
+  {
+    "path": ".github/workflows/checks.yml",
+    "sha256": "bedac61456a1f1fc2fbf1b0b6ed37717a614f4116205455c731d8d1f0a548a61"
+  },
+  {
+    "path": ".gitignore",
+    "sha256": "4a8d984279954e0461e0ffef9b9e7455340a0a762f227c01065a53482a83a4f1"
+  },
+  {
+    "path": "LICENSE",
+    "sha256": "8ee98a68db08740852b491de91922961bb928aaa13f9897c078a0e6eb3e1218a"
+  },
+  {
+    "path": "README.es.md",
+    "sha256": "a26cace36b4ef2dc5e79354a296dc78b4e402ba95b1bc5132ab34997e665b69c"
+  },
+  {
+    "path": "README.md",
+    "sha256": "d8b7d349fe366f6cd3cb1656ce81fd8ac616bf5ec14b4399400f18ac3982eed5"
+  },
+  {
+    "path": "THIRD_PARTY.md",
+    "sha256": "c4bf33957f36231955ac36df85d188fa9394f521d45c8c9120d576f668c44c36"
+  },
+  {
+    "path": "analysis_options.yaml",
+    "sha256": "e0ea485cfdbc3e12b93efb8679a5ea73ebfe20ea4ca0c473dc594fc2fb274ed5"
+  },
+  {
+    "path": "android/.gitignore",
+    "sha256": "fc21eff6d3d37e43c61ad5db5a1c747ea4c21186910c4919906b8b450cfce323"
+  },
+  {
+    "path": "android/app/build.gradle.kts",
+    "sha256": "9ec4bf9e78aca8dbb54fe5eccf1856938a3860720ad77ea00315c0e4f0d47b9d"
+  },
+  {
+    "path": "android/app/src/debug/AndroidManifest.xml",
+    "sha256": "30b0832ed8b92dfbd6ae2abfa939ccf26333d37600056b1572bd4a397a18a74b"
+  },
+  {
+    "path": "android/app/src/main/AndroidManifest.xml",
+    "sha256": "2eeadf2c1de24d3af955a99af4ed5d2df31c30622ba8dd27036698d5a4f291e4"
+  },
+  {
+    "path": "android/app/src/main/kotlin/dev/navalcode/bitacora/MainActivity.kt",
+    "sha256": "61ec997f3593e4dbc953109d815028073f50eb48f006fdecdf6c94958c5e8c84"
+  },
+  {
+    "path": "android/app/src/main/res/drawable/ic_bitacora.xml",
+    "sha256": "2348ecdf14eef550ef1b15f6a9e46d219aafabd01d94e50febe7ad9d237a244f"
+  },
+  {
+    "path": "android/app/src/main/res/drawable/launch_background.xml",
+    "sha256": "94433756fe10005ddd6fc55cc5c0b1e9f3c10b66a08ceac795ece6713d34e28a"
+  },
+  {
+    "path": "android/app/src/main/res/drawable-v21/launch_background.xml",
+    "sha256": "7ca6d5cec2169c5a98661a119db23a6f3399c8fef2256ff04f3a642831282478"
+  },
+  {
+    "path": "android/app/src/main/res/values/styles.xml",
+    "sha256": "937d7c82f539c72eb94fd3a3773f29b3d3fef1997213c92cb632298cedf4bda9"
+  },
+  {
+    "path": "android/app/src/main/res/values-night/styles.xml",
+    "sha256": "8c5bad5152f217e837519f9c15211d19f39bd45f5f67faf6dd81cb4b299e518f"
+  },
+  {
+    "path": "android/app/src/profile/AndroidManifest.xml",
+    "sha256": "30b0832ed8b92dfbd6ae2abfa939ccf26333d37600056b1572bd4a397a18a74b"
+  },
+  {
+    "path": "android/build.gradle.kts",
+    "sha256": "6a26dba2cb8dfba1e74f540b0d17a89d96c1301d3c3bfda14348bed257fddcba"
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.jar",
+    "sha256": "16caeaf66d57a0d1d2087fef6a97efa62de8da69afa5b908f40db35afc4342da"
+  },
+  {
+    "path": "android/gradle/wrapper/gradle-wrapper.properties",
+    "sha256": "5b796f11dabad5ddfffbf00a05ba1f55397415b52d896d80113a191519a19cff"
+  },
+  {
+    "path": "android/gradle.properties",
+    "sha256": "750752c9a7ce0b939691013dace79ca4fbf959fb8153e72d5557b70e31c7a4a5"
+  },
+  {
+    "path": "android/gradlew",
+    "sha256": "ec56c02543666d92d9ac5ae7fcc48f88ce4de0deb8b7f9b39928ca46f68c1b2b"
+  },
+  {
+    "path": "android/gradlew.bat",
+    "sha256": "c13c6e91b9a517783976de213d46398c661ea9e17651376d7301e839eaedcc62"
+  },
+  {
+    "path": "android/settings.gradle.kts",
+    "sha256": "a9b5756048f668d4ebf355116678fd334cd5f2169b7d4518ad19b8df14d3af36"
+  },
+  {
+    "path": "docs/ARCHITECTURE.md",
+    "sha256": "1fb7a40a7de5277fe9d8d2403e6d451d973e55ac12bfb16080df791e4dcb8f08"
+  },
+  {
+    "path": "docs/images/board.png",
+    "sha256": "78723da723f7057e4e52f035c2ed5343074f702a2368e5e46712c70ffaef459e"
+  },
+  {
+    "path": "docs/images/detail.png",
+    "sha256": "3efe4b461e444fc3dfeb0eb64cbf07b7519e9a131b783ae61dfe2bdc45a7707e"
+  },
+  {
+    "path": "integration_test/app_test.dart",
+    "sha256": "ac561515535f45be9666649d92030a0fb96c926c972b11ef7685a0b5aadc712c"
+  },
+  {
+    "path": "lib/data/completion_preferences.dart",
+    "sha256": "73200c0796a6a797c2b63442172f0e6824bc28d0944fd7a26e8c4a444045b15b"
+  },
+  {
+    "path": "lib/domain/tasks.dart",
+    "sha256": "709c4e7520883b53b1237e3e795462c11888899068deb4a198370959cd2a927f"
+  },
+  {
+    "path": "lib/l10n/copy.dart",
+    "sha256": "10725ada11d81c86e31dd94e665911a9f9c179692fdeceb71198d90d86f21b99"
+  },
+  {
+    "path": "lib/main.dart",
+    "sha256": "088a6c6c071a5d0c774503619ddaaead1797bffb839eb54485e1a996068a0e11"
+  },
+  {
+    "path": "pubspec.lock",
+    "sha256": "1188f2e355a04d06dc461c94d37a0ebe150d8ed1d0d60b1dafe31b3082f7517b"
+  },
+  {
+    "path": "pubspec.yaml",
+    "sha256": "0ab362805b64c953b128913740f3ec505f4efd097a49b7143b9505ee559b4029"
+  },
+  {
+    "path": "test/controller_test.dart",
+    "sha256": "6b8aee261450ea89c63f8c8f68c326be617d1e2f19eb841667e19bfcdd5e4e30"
+  },
+  {
+    "path": "test/fakes.dart",
+    "sha256": "1c19985005b82858c002918c1f4fdb6f8b46a2ab20578d2a527b5cda31d6afe2"
+  },
+  {
+    "path": "test/widget_test.dart",
+    "sha256": "ab50cf65e3e10cc72d43d70c64e2f47dc24b5825ae9d43042c70a595ff1175ea"
+  },
+  {
+    "path": "test_driver/capture.dart",
+    "sha256": "68e8db253e0ef589327cc24c11cb97ea1a2bf8b5de4d2722e561996901b6942d"
+  },
+  {
+    "path": "third_party/flutter-LICENSE.txt",
+    "sha256": "a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20"
+  },
+  {
+    "path": "third_party/gradle-LICENSE.txt",
+    "sha256": "9536d88ea948603d18e232a13f5958d67807cd80828036b082bff171d2cf0703"
+  },
+  {
+    "path": "third_party/gradle-NOTICE.txt",
+    "sha256": "c2de5fd9adc7ccc4e1382a0e1f38ec6e14f8ca6e28d3c20289fe80353b019aa1"
+  },
+  {
+    "path": "web/favicon.svg",
+    "sha256": "cff00d67b43dbe046c9d17fce015100e931765fd8530b6fd63df7c6134a16efa"
+  },
+  {
+    "path": "web/index.html",
+    "sha256": "69bdb5a2df8eb6a8909b7319d2f0ebc60614e5839fa76033f651700ef07bfa2f"
+  },
+  {
+    "path": "web/manifest.json",
+    "sha256": "c8745a46ceae4a43cb53aad288de3f1bd346540676fd4dd7ce8c3741b380b82d"
+  }
+]
