@@ -9,7 +9,7 @@
   },
   {
     "path": "DESIGN.md",
-    "sha256": "d653043e328f32f363aa636290332cc07ab2e9c1348e8ff0f5db5448c42f665e"
+    "sha256": "ab557cea080d9c8eda6bcb3c72403f5346b2c6adf13b6e444e6a1c33a0cbab62"
   },
   {
     "path": "LICENSE",
@@ -17,11 +17,11 @@
   },
   {
     "path": "README.es.md",
-    "sha256": "7453360b5a45d231a5bea888dac199d4814e655b168baf03d37bd942f744745f"
+    "sha256": "4613ec7e15a7baea0f37f2afc6ec96d7c768b7ac35ae99baf11ed674a84ce94f"
   },
   {
     "path": "README.md",
-    "sha256": "2f7d550b43089dcd592eeaceb12dc7d96437df3553de70df71a5ad67aaa27d82"
+    "sha256": "d0c092322022fcd2fede430550d582ae681ca7907e4e348a9be7516cf925c3b9"
   },
   {
     "path": "THIRD_PARTY.md",
@@ -125,19 +125,39 @@
   },
   {
     "path": "docs/ARCHITECTURE.md",
-    "sha256": "1fb7a40a7de5277fe9d8d2403e6d451d973e55ac12bfb16080df791e4dcb8f08"
+    "sha256": "74a897d5259f6078333db58bea0d9663f71647a6397cbc6678a853c79710cb0c"
+  },
+  {
+    "path": "docs/VERIFICATION.md",
+    "sha256": "4adf6dc80cfc5ffb1bc34fad3fce59e338a7e7c7d78595a63f6ca83e41035259"
   },
   {
     "path": "docs/images/board.png",
-    "sha256": "768f293a487dc4c4de2fd80c479df60fb400543d80ae26be8194b7b399e42d05"
+    "sha256": "a94c81f8d2f058c9718dbbadceab04eaf68420926ab6ccdadc57ceb1e1e09d9a"
   },
   {
     "path": "docs/images/detail.png",
-    "sha256": "238859d63f319c888ee06aee5d2d52581bbfb8ef23b2d544dddddc37ddb14547"
+    "sha256": "967bdf3745e7846bca4cbe224e6b07662980faa835a103b28eb550601f34f645"
+  },
+  {
+    "path": "docs/images/es-board.png",
+    "sha256": "06d29885a520cee24d48039575ce3ebc1a7cda2dbf381cf1bb22e595752444a7"
+  },
+  {
+    "path": "docs/images/es-detail.png",
+    "sha256": "0daa3a3af3ed56e5ebf6b76d72617067d5ff5583f1a95ea8acd640f2ddb611cc"
+  },
+  {
+    "path": "docs/images/es-large-board.png",
+    "sha256": "b12bc51cd06b9ea0c2b44435ca8cab657f2f250a58bf8adb06c915b7a2f73974"
+  },
+  {
+    "path": "docs/images/es-large-detail.png",
+    "sha256": "d029f92f24cdaf48c0985fd268cf27590ed16f2fdf7de750c03e6458d15d23a5"
   },
   {
     "path": "integration_test/app_test.dart",
-    "sha256": "865faa34d22165565b407a8a8fe595c8735fa92ed3396a455bea084d6d4301f9"
+    "sha256": "1aeee9660dbf0ac4154b0dfbc163c2c646bbce2cf5cc56912a0cd45c1f957ce7"
   },
   {
     "path": "lib/data/completion_preferences.dart",
@@ -145,15 +165,15 @@
   },
   {
     "path": "lib/domain/tasks.dart",
-    "sha256": "709c4e7520883b53b1237e3e795462c11888899068deb4a198370959cd2a927f"
+    "sha256": "9f6fa4f19c05be8f2093d5b984cf3f763b4921af808bba2b74d048fcd981d827"
   },
   {
     "path": "lib/l10n/copy.dart",
-    "sha256": "1c2593d50b840f6ac35a2910f5ac36082c698efb7c465cf4f960ce84e43c1a8c"
+    "sha256": "96859be912b22fc11c1cfe35bf3f4169aa08a9c4c09d393ee5c25d4965609cf3"
   },
   {
     "path": "lib/main.dart",
-    "sha256": "75290320e0b04aa18214d77a2d072200bf7b08af257d98324be0fee8a186fc98"
+    "sha256": "a057e3d29f967d4fb2ec1831ca6d09073f8fe37af23891cc0fbea610bcdbbb86"
   },
   {
     "path": "lib/ui/app_theme.dart",
@@ -177,11 +197,11 @@
   },
   {
     "path": "test/widget_test.dart",
-    "sha256": "84406d0980461e65db93a3befe20b14529204997f5d570c771c9f53b748aaa48"
+    "sha256": "e73676f7fcb0149b2965870974a296cc328f1b2f335bd74a056d145300dba400"
   },
   {
     "path": "test_driver/capture.dart",
-    "sha256": "68e8db253e0ef589327cc24c11cb97ea1a2bf8b5de4d2722e561996901b6942d"
+    "sha256": "93b6ca910e4004007457d1618241968451bc4432cc35f20b9f25e1e622ab2b51"
   },
   {
     "path": "third_party/flutter-LICENSE.txt",

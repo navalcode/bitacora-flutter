@@ -131,9 +131,10 @@ class _TaskBoardState extends State<TaskBoard> {
                 runSpacing: 4,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Text(
-                    '${copy(context, CopyKey.completedCount)}: ${model.completed.length} / ${model.items.length}',
-                  ),
+                  if (model.storageReady)
+                    Text(
+                      '${copy(context, CopyKey.completedCount)}: ${model.completed.length} / ${model.items.length}',
+                    ),
                   Text(
                     '${copy(context, CopyKey.demo)} · ${widget.environment.name}',
                     style: Theme.of(context).textTheme.bodySmall,
@@ -185,8 +186,13 @@ class _TaskBoardState extends State<TaskBoard> {
                 ),
               if (model.storageError)
                 Notice(
-                  text: copy(context, CopyKey.storageError),
-                  action: copy(context, CopyKey.retry),
+                  text: copy(
+                    context,
+                    model.storageReady
+                        ? CopyKey.storageWriteError
+                        : CopyKey.storageReadError,
+                  ),
+                  action: copy(context, CopyKey.reloadStatus),
                   onAction: () => unawaited(model.initialize()),
                 ),
               if (model.saving)
@@ -311,8 +317,13 @@ class TaskDetail extends StatelessWidget {
                 const SizedBox(height: 32),
                 if (model.storageError)
                   Notice(
-                    text: copy(context, CopyKey.storageError),
-                    action: copy(context, CopyKey.retry),
+                    text: copy(
+                      context,
+                      model.storageReady
+                          ? CopyKey.storageWriteError
+                          : CopyKey.storageReadError,
+                    ),
+                    action: copy(context, CopyKey.reloadStatus),
                     onAction: () => unawaited(model.initialize()),
                   ),
                 FilledButton.icon(

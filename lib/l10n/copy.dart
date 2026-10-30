@@ -14,7 +14,9 @@ enum CopyKey {
   offline,
   timeout,
   retry,
-  storageError,
+  storageReadError,
+  storageWriteError,
+  reloadStatus,
   notice,
   scenario,
   connected,
@@ -37,28 +39,33 @@ const translations = <String, Map<CopyKey, String>>{
     CopyKey.pending: 'Pending',
     CopyKey.completed: 'Completed',
     CopyKey.clearFilters: 'Clear search and filters',
-    CopyKey.empty: 'No tasks match these filters.',
+    CopyKey.empty: 'No tasks match. Change your search or clear the filters.',
     CopyKey.markComplete: 'Mark complete',
     CopyKey.reopen: 'Mark pending',
-    CopyKey.loading: 'Updating the demo list…',
-    CopyKey.offline: 'The update is unavailable. The demo list is still here.',
-    CopyKey.timeout: 'The demo response took too long. You can try again.',
+    CopyKey.loading: 'Updating tasks…',
+    CopyKey.offline:
+        'The update failed. The task list is still available. Choose Normal loading in Loading scenarios.',
+    CopyKey.timeout:
+        'Loading took too long. Retry or choose Normal loading in Loading scenarios.',
     CopyKey.retry: 'Try again',
-    CopyKey.storageError:
-        'Local storage is unavailable. Retry before making changes.',
-    CopyKey.notice:
-        'Fictional tasks. Completion is saved on this device. No location is collected.',
-    CopyKey.scenario: 'Demo scenarios',
-    CopyKey.connected: 'Available data',
+    CopyKey.storageReadError:
+        'Saved task status could not be read. Reload tasks to enable changes.',
+    CopyKey.storageWriteError:
+        'Saving could not be confirmed. Reload tasks before trying again.',
+    CopyKey.reloadStatus: 'Reload tasks',
+    CopyKey.notice: 'Sample tasks. Changes are saved on this device.',
+    CopyKey.scenario: 'Loading scenarios',
+    CopyKey.connected: 'Normal loading',
     CopyKey.offlineScenario: 'Simulated failure',
     CopyKey.slowScenario: 'Slow response',
     CopyKey.demo: 'Demo',
     CopyKey.completedCount: 'Completed',
     CopyKey.saving: 'Saving…',
-    CopyKey.missing: 'This task is no longer available.',
-    CopyKey.observe: 'Observe',
+    CopyKey.missing:
+        'This task is no longer available. Go back to the list to choose another.',
+    CopyKey.observe: 'Observation',
     CopyKey.review: 'Review',
-    CopyKey.maintain: 'Prepare',
+    CopyKey.maintain: 'Preparation',
   },
   'es': {
     CopyKey.subtitle: 'Tus tareas de campo',
@@ -67,30 +74,35 @@ const translations = <String, Map<CopyKey, String>>{
     CopyKey.pending: 'Pendientes',
     CopyKey.completed: 'Completadas',
     CopyKey.clearFilters: 'Borrar búsqueda y filtros',
-    CopyKey.empty: 'No hay tareas para estos filtros.',
+    CopyKey.empty:
+        'No hay tareas que coincidan. Cambia la búsqueda o quita los filtros.',
     CopyKey.markComplete: 'Marcar completada',
     CopyKey.reopen: 'Marcar pendiente',
-    CopyKey.loading: 'Actualizando la lista de demostración…',
+    CopyKey.loading: 'Actualizando tareas…',
     CopyKey.offline:
-        'No se pudo actualizar. Conservamos la lista de demostración.',
+        'No se ha podido actualizar. La lista sigue disponible. Elige Carga normal en Escenarios de carga.',
     CopyKey.timeout:
-        'La respuesta de demostración tardó demasiado. Puedes reintentar.',
+        'La carga ha tardado demasiado. Reintenta o elige Carga normal en Escenarios de carga.',
     CopyKey.retry: 'Reintentar',
-    CopyKey.storageError:
-        'El guardado local no está disponible. Reintenta antes de modificar datos.',
+    CopyKey.storageReadError:
+        'No se puede leer el estado guardado. Vuelve a cargar las tareas para poder editarlas.',
+    CopyKey.storageWriteError:
+        'No se ha podido confirmar el guardado. Recarga las tareas antes de intentarlo de nuevo.',
+    CopyKey.reloadStatus: 'Recargar tareas',
     CopyKey.notice:
-        'Tareas ficticias. El estado se guarda en este dispositivo. No se recoge ubicación.',
-    CopyKey.scenario: 'Escenarios de demostración',
-    CopyKey.connected: 'Datos disponibles',
+        'Tareas de ejemplo. Los cambios se guardan en este dispositivo.',
+    CopyKey.scenario: 'Escenarios de carga',
+    CopyKey.connected: 'Carga normal',
     CopyKey.offlineScenario: 'Fallo simulado',
     CopyKey.slowScenario: 'Respuesta lenta',
     CopyKey.demo: 'Demo',
     CopyKey.completedCount: 'Completadas',
     CopyKey.saving: 'Guardando…',
-    CopyKey.missing: 'Esta tarea ya no está disponible.',
-    CopyKey.observe: 'Observar',
-    CopyKey.review: 'Revisar',
-    CopyKey.maintain: 'Preparar',
+    CopyKey.missing:
+        'Esta tarea ya no está disponible. Vuelve a la lista para elegir otra.',
+    CopyKey.observe: 'Observación',
+    CopyKey.review: 'Revisión',
+    CopyKey.maintain: 'Preparación',
   },
 };
 

@@ -1,80 +1,73 @@
 # Bitácora
 
-[English](README.md) · [![CI](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml/badge.svg)](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml)
+[English](README.md) · [Compilación y pruebas](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml)
 
-Demo Flutter original de tareas de campo para observar estado asíncrono, recuperación y persistencia local. Seis tareas ficticias permiten buscar, filtrar pendientes/completadas, consultar detalles y guardar su estado en el dispositivo.
+Aplicación Flutter con seis tareas ficticias de campo. Permite buscar y filtrar la lista, leer las instrucciones de cada tarea y marcarla como completada. Ese estado se guarda en el dispositivo y se recupera al reiniciar.
 
-Los flavors `dev` y `prod` son de demostración. No necesita cuentas, API keys, ubicación ni backend. Textos, datos e icono de cuaderno son originales; los iconos de interfaz conservan las licencias del framework.
+El proyecto muestra gestión asíncrona del estado, sustitución de peticiones, escrituras confirmadas y recuperación ante fallos de almacenamiento. La lista viene incluida en la app. No necesita cuenta, clave de API, ubicación ni backend.
 
-| Pendientes tras guardar una tarea | Detalle guardado |
-|---|---|
-| ![Tareas pendientes](docs/images/board.png) | ![Tarea guardada](docs/images/detail.png) |
+<p>
+<img src="docs/images/es-board.png" alt="Tareas pendientes de Bitácora después de completar una" width="240">
+<img src="docs/images/es-detail.png" alt="Detalle de una tarea completada en Bitácora" width="240">
+</p>
 
-Capturas reales del emulador API 37 de la app normal rediseñada, tras guardar una tarea ficticia. No son conceptos generados. La interfaz capturada está en inglés.
+## Qué puedes probar
 
-## Diseño de interfaz
+1. Abre una tarea, lee sus instrucciones y pulsa **Marcar completada**.
+2. Vuelve a la lista y compara Todas, Pendientes y Completadas. Busca por título, con o sin acentos en las vocales.
+3. Abre **Escenarios de carga** con el icono de laboratorio. Selecciona Fallo simulado o Respuesta lenta. Las tareas incluidas siguen disponibles.
+4. Selecciona **Carga normal** para recuperar la actualización.
+5. Reinicia la app para comprobar que la tarea sigue completada.
 
-[DESIGN.md](DESIGN.md) explica la estructura orientada a tareas: lista plana, completar/abrir detalle independientes, contador útil, búsqueda etiquetada y texto adaptable. Los avisos son live region. Outfit está empaquetada con el aviso OFL completo; no hay petición a un CDN de fuentes al abrir la app.
+Si no se puede leer el estado guardado, los controles quedan deshabilitados y no se muestra un contador que dé por pendientes todas las tareas. Si no se puede confirmar una escritura, la pantalla conserva el último estado confirmado. **Recargar tareas** vuelve a leer lo guardado antes de repetir una acción. Las pruebas de controlador y widgets provocan estos fallos de forma controlada, sin dañar almacenamiento real.
 
-## Probar
+## Ejecutar
 
-1. Abre una tarea y márcala como completada.
-2. Vuelve y compara Todas, Pendientes y Completadas.
-3. Busca títulos españoles con o sin acentos en las vocales.
-4. En el menú de laboratorio, selecciona Fallo simulado o Respuesta lenta.
-5. La lista incluida sigue disponible. Vuelve a Datos disponibles para recuperar.
-6. Reinicia: el estado confirmado permanece guardado localmente.
-
-Los escenarios modifican la fuente de demostración. El catálogo viene incluido; no es una caché de un servicio de producción.
-
-## Ejecutar y comprobar
-
-Validado con **Flutter 3.38.7**, Dart 3.10.7, JDK 17 y Android SDK 36. Android requiere API 24 o superior. `pubspec.lock` fija versiones y hashes de dependencias.
+Entorno comprobado: **Flutter 3.38.7 / Dart 3.10.7**, **JDK 17** y **Android SDK 36**. Android requiere API 24 o superior. `pubspec.lock` fija versiones y hashes de dependencias.
 
 ```sh
 flutter pub get --enforce-lockfile
 flutter analyze
 flutter test
 flutter run --flavor dev
-flutter build apk --debug --flavor prod
-flutter build appbundle --release --flavor prod
+flutter build apk --debug --flavor dev
+flutter build apk --release --flavor prod
 flutter build web --dart-define=APP_ENV=dev --no-web-resources-cdn --pwa-strategy=none
 ```
 
-Ambos flavors Android usan `lib/main.dart`; el build selecciona el entorno. Un nombre desconocido falla explícitamente. En web, `APP_ENV=dev` o `prod` selecciona la etiqueta, sin conectar servicios reales.
+Los flavors `dev` y `prod` son demos. En Android tienen IDs y nombres de lanzador distintos, por lo que su almacenamiento es independiente. Ambos usan `lib/main.dart`. En web, `APP_ENV` selecciona la etiqueta del entorno, sin conectar un servicio real. Un nombre desconocido falla de forma explícita. Para generar un AAB: `flutter build appbundle --release --flavor prod`.
 
-Flutter puede elegir el JDK de Android Studio antes que `JAVA_HOME`. Si la instalación compartida selecciona uno incompatible, configura JDK 17 para este proyecto mediante propiedades locales de Gradle o `GRADLE_OPTS=-Dorg.gradle.java.home=/ruta/a/jdk-17`. No versiones rutas locales. No hay clave o firma de producción configurada.
+Flutter puede elegir el JDK de Android Studio antes que `JAVA_HOME`. Configura JDK 17 para este proyecto con propiedades locales de Gradle o `GRADLE_OPTS=-Dorg.gradle.java.home=/ruta/a/jdk-17`. No incluyas rutas locales ni claves de firma en Git. No hay firma de producción configurada.
 
-Prueba conectada y capturas, sustituyendo el identificador del dispositivo:
+## Prueba nativa y capturas
+
+Sustituye `DEVICE_ID` por el serial del dispositivo:
 
 ```sh
-flutter test integration_test/app_test.dart --flavor dev -d emulator-5554
-flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d emulator-5554 --keep-app-running
+flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
+flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-El recorrido reinicia los IDs de esta demo y deja una tarea ficticia completada. El driver guarda los dos PNG revisados en `docs/images/`.
+El recorrido reinicia solo los IDs completados de esta demo, crea un controlador nuevo y deja una tarea ficticia completada. El driver opcional guarda los dos PNG en `docs/images/`. Ejecuta los comandos Flutter de build, test y drive en secuencia dentro de un mismo checkout: comparten archivos Android generados. Para comprobar el reinicio del proceso normal después de una build de integración, recompila o reinstala la entrada normal sin borrar preferencias; consulta [verificación](docs/VERIFICATION.md), en inglés.
 
 ## Leer el código
 
-- [`tasks.dart`](lib/domain/tasks.dart): modelos, contratos, generaciones de peticiones, deadline y estado de almacenamiento confirmado.
-- [`completion_preferences.dart`](lib/data/completion_preferences.dart): adaptador real de preferencias.
-- [`main.dart`](lib/main.dart): grafo explícito, navegación lista/detalle y propiedad del estado.
-- [`copy.dart`](lib/l10n/copy.dart): recursos ES/EN y fallback.
-- [`controller_test.dart`](test/controller_test.dart): fallos, recuperación, resultados obsoletos, disposición, timeout y estado de solo lectura.
-- [`app_test.dart`](integration_test/app_test.dart): persistencia nativa y capturas.
+- [tasks.dart](lib/domain/tasks.dart): modelos, contratos de fuente/almacenamiento, generaciones de peticiones, límite de espera y estado confirmado.
+- [completion_preferences.dart](lib/data/completion_preferences.dart): adaptador `SharedPreferencesAsync`; solo guarda IDs de tareas completadas.
+- [main.dart](lib/main.dart): construcción de dependencias, navegación lista/detalle, ciclo de vida del controlador y recuperación.
+- [copy.dart](lib/l10n/copy.dart): recursos ES/EN e inglés de respaldo para idiomas no soportados.
+- [controller_test.dart](test/controller_test.dart): fallos, respuestas tardías, liberación del controlador, timeout y estado de solo lectura.
+- [widget_test.dart](test/widget_test.dart): navegación, filtros, recuperación de almacenamiento, redimensionado y texto ampliado.
+- [app_test.dart](integration_test/app_test.dart): preferencias Android reales y capturas opcionales.
 
-[Arquitectura y decisiones](docs/ARCHITECTURE.md), en inglés, explica la diferencia entre descartar Futures obsoletos y cancelar transporte, y por qué un fallo de lectura bloquea escrituras.
+[Arquitectura](docs/ARCHITECTURE.md), en inglés, explica la diferencia entre descartar un Future obsoleto y cancelar transporte, y por qué hay que leer el almacenamiento antes de editar. [DESIGN.md](DESIGN.md) recoge el diseño, las acciones independientes de cada fila y Outfit empaquetada localmente.
 
-## Alcance verificado
+## Comprobaciones y límites
 
-El 29 de octubre de 2026 pasan **17 tests del controlador, seis de widgets y un recorrido de persistencia nativa**. Analyzer no tiene avisos. Se comprueban 360×800 y texto 1,8. Se generan APK debug dev/prod, AAB prod release y web. El arranque normal Android conserva la tarea tras sustituir el APK y reiniciar el proceso.
+Hay **26 pruebas de controlador/widgets**: 17 del controlador y nueve de widgets, incluidas lectura/escritura fallidas y recuperación ES/EN a 360 × 800 con texto 1,8. [Verificación](docs/VERIFICATION.md) separa ejecuciones locales, persistencia nativa, navegador, auditoría de artefactos e intentos fallidos. El [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) comprueba Android/web y tiene un job de integración en API 35.
 
-La revisión visual vuelve a comprobar analyzer y los 23 tests, recorrido de preferencias nativas, completar/reiniciar la app normal, español/inglés, fallo simulado y texto 1,8 a 360 × 800. Compilan APK dev debug y prod release, y la web. Los builds previos dev/prod debug, AAB release y pruebas de navegador conservan su alcance histórico. El APK release actual mide 0,95 MB DEX y alineación nativa/ZIP de 16 KB, con advertencia de metadatos R8 no disponibles. No equivale a aprobación de tienda. No se ha validado iOS ni un dispositivo físico.
-
-[GitHub Actions](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml): analyzer y la suite completa, builds dev/prod Android, bundle prod optimizado, web y recorrido nativo en emulador API35. Las pruebas nativas locales usaron API37.
+La exportación incluye Android y web. No se han validado iOS nativo ni dispositivos físicos. Release activa R8 y reducción de recursos, sin firma de producción ni publicación en tiendas. Las auditorías de artefactos son consultivas. Las pruebas de widgets/emulador no son una certificación formal de accesibilidad.
 
 ## Licencia
 
-Código, textos, datos e ilustraciones vectoriales originales: [MIT](LICENSE), copyright 2026 Manuel Naval. [Avisos de terceros](THIRD_PARTY.md) conserva las licencias de Flutter, plantillas y dependencias.
-
-La CI nativa ejecuta persistencia sin convertir la superficie para capturas. Las capturas requieren el define y driver documentados. `tools/run_android_integration.sh` es un wrapper Linux de CI, con serial explícito, ejecución acotada y diagnóstico filtrado; no reintenta ni oculta un resultado fallido.
+Código, textos, datos e ilustraciones vectoriales originales: [MIT](LICENSE), Manuel Naval, 2026. Plantillas Flutter, fuentes y dependencias mantienen sus licencias en [avisos de terceros](THIRD_PARTY.md).

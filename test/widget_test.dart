@@ -60,28 +60,126 @@ void main() {
     expect(find.byKey(const ValueKey('task-alba')), findsNothing);
   });
 
-  testWidgets(
-    'failed storage is visible and completion controls are disabled',
-    (tester) async {
-      final store = MemoryStore()..failLoad = true;
-      final model = TaskController(ImmediateSource(), store);
-      await model.initialize();
-      await tester.pumpWidget(
-        BitacoraApp(
-          model: model,
-          environment: AppEnvironment.dev,
-          locale: const Locale('en'),
-        ),
-      );
-      await tester.pumpAndSettle();
-      await showItem(tester, find.byKey(const ValueKey('complete-alba')));
-      final checkbox = tester.widget<Checkbox>(
-        find.byKey(const ValueKey('complete-alba')),
-      );
-      expect(checkbox.onChanged, isNull);
-      expect(store.writes, 0);
-    },
-  );
+  for (final language in ['en', 'es']) {
+    testWidgets(
+      '$language storage read failure explains recovery and blocks writes',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = 1.8;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final store = MemoryStore()..failLoad = true;
+        final model = TaskController(ImmediateSource(), store);
+        await model.initialize();
+        await tester.pumpWidget(
+          BitacoraApp(
+            model: model,
+            environment: AppEnvironment.dev,
+            locale: Locale(language),
+          ),
+        );
+        await tester.pumpAndSettle();
+        // Unknown saved status must not be presented as zero completed tasks.
+        expect(
+          find.text(
+            language == 'en' ? 'Completed: 0 / 6' : 'Completadas: 0 / 6',
+          ),
+          findsNothing,
+        );
+        final message = language == 'en'
+            ? 'Saved task status could not be read. Reload tasks to enable changes.'
+            : 'No se puede leer el estado guardado. Vuelve a cargar las tareas para poder editarlas.';
+        final reload = language == 'en' ? 'Reload tasks' : 'Recargar tareas';
+        await showItem(tester, find.text(message));
+        expect(find.text(message), findsOneWidget);
+        await showItem(tester, find.byKey(const ValueKey('complete-alba')));
+        expect(
+          tester
+              .widget<Checkbox>(find.byKey(const ValueKey('complete-alba')))
+              .onChanged,
+          isNull,
+        );
+        expect(store.writes, 0);
+        store.failLoad = false;
+        await showItem(tester, find.text(reload), step: -150);
+        await tester.tap(find.text(reload));
+        await tester.pumpAndSettle();
+        // Removing the notice moves this row above the retained scroll offset.
+        await showItem(
+          tester,
+          find.byKey(const ValueKey('complete-alba')),
+          step: -150,
+        );
+        expect(
+          tester
+              .widget<Checkbox>(find.byKey(const ValueKey('complete-alba')))
+              .onChanged,
+          isNotNull,
+        );
+        await tester.tap(find.byKey(const ValueKey('complete-alba')));
+        await tester.pumpAndSettle();
+        expect(store.ids, {'alba'});
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      '$language failed save keeps status and offers a working reload',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = 1.8;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final store = MemoryStore()..failSave = true;
+        final model = TaskController(ImmediateSource(), store);
+        await model.initialize();
+        await tester.pumpWidget(
+          BitacoraApp(
+            model: model,
+            environment: AppEnvironment.dev,
+            locale: Locale(language),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('task-alba')));
+        await tester.tap(
+          find.text(
+            language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+          ),
+        );
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        await tester.tap(find.byKey(const ValueKey('detail-complete')));
+        await tester.pumpAndSettle();
+        expect(store.ids, isEmpty);
+        expect(model.completed, isEmpty);
+        final message = language == 'en'
+            ? 'Saving could not be confirmed. Reload tasks before trying again.'
+            : 'No se ha podido confirmar el guardado. Recarga las tareas antes de intentarlo de nuevo.';
+        final reload = language == 'en' ? 'Reload tasks' : 'Recargar tareas';
+        await showItem(tester, find.text(message), step: -150);
+        expect(find.text(message), findsOneWidget);
+        store.failSave = false;
+        await showItem(tester, find.text(reload));
+        await tester.tap(find.text(reload));
+        await tester.pumpAndSettle();
+        expect(find.text(message), findsNothing);
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        await tester.tap(find.byKey(const ValueKey('detail-complete')));
+        await tester.pumpAndSettle();
+        expect(store.ids, {'alba'});
+        expect(
+          find.text(language == 'en' ? 'Mark pending' : 'Marcar pendiente'),
+          findsOneWidget,
+        );
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
 
   testWidgets('offline notice preserves usable task content', (tester) async {
     final model = TaskController(ImmediateSource(), MemoryStore());
@@ -96,7 +194,9 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(
-      find.text('The update is unavailable. The demo list is still here.'),
+      find.text(
+        'The update failed. The task list is still available. Choose Normal loading in Loading scenarios.',
+      ),
       findsOneWidget,
     );
     await showItem(tester, find.byKey(const ValueKey('task-alba')));

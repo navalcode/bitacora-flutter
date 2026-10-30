@@ -9,6 +9,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   const captureScreenshots = bool.fromEnvironment('CAPTURE_SCREENSHOTS');
+  const language = String.fromEnvironment(
+    'CAPTURE_LANGUAGE',
+    defaultValue: 'en',
+  );
+  const prefix = String.fromEnvironment('CAPTURE_PREFIX');
+  if (!['en', 'es'].contains(language) ||
+      !RegExp(r'^[a-z0-9-]{0,32}$').hasMatch(prefix)) {
+    throw ArgumentError('Use en/es and a short lowercase screenshot prefix');
+  }
+  String imageName(String name) => prefix.isEmpty ? name : '$prefix-$name';
   testWidgets('native preferences survive disposal and a fresh controller', (
     tester,
   ) async {
@@ -20,7 +30,7 @@ void main() {
       BitacoraApp(
         model: model,
         environment: AppEnvironment.dev,
-        locale: const Locale('en'),
+        locale: const Locale(language),
       ),
     );
     await tester.pumpAndSettle();
@@ -37,12 +47,19 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Check Alba lookout'));
+    await tester.tap(
+      find.text(
+        language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+      ),
+    );
     await tester.pumpAndSettle();
     await model.setCompleted('alba', true);
     await tester.pumpAndSettle();
-    expect(find.text('Mark pending'), findsOneWidget);
-    if (captureScreenshots) await binding.takeScreenshot('detail');
+    expect(
+      find.text(language == 'en' ? 'Mark pending' : 'Marcar pendiente'),
+      findsOneWidget,
+    );
+    if (captureScreenshots) await binding.takeScreenshot(imageName('detail'));
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
 
@@ -56,15 +73,18 @@ void main() {
       BitacoraApp(
         model: restored,
         environment: AppEnvironment.dev,
-        locale: const Locale('en'),
+        locale: const Locale(language),
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.text('Completed: 1 / 6'), findsOneWidget);
+    expect(
+      find.text(language == 'en' ? 'Completed: 1 / 6' : 'Completadas: 1 / 6'),
+      findsOneWidget,
+    );
     restored.filterChanged(TaskFilter.pending);
     await tester.pumpAndSettle();
     expect(restored.visible('en'), hasLength(5));
-    if (captureScreenshots) await binding.takeScreenshot('board');
+    if (captureScreenshots) await binding.takeScreenshot(imageName('board'));
     await tester.pumpWidget(const SizedBox.shrink());
     await tester.pumpAndSettle();
     // Leave this one fictional completion for a separate process-restart smoke check.

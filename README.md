@@ -1,80 +1,73 @@
 # Bitácora
 
-[Español](README.es.md) · [![CI](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml/badge.svg)](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml)
+[Español](README.es.md) · [Build and tests](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml)
 
-An original Flutter field-task demo for inspecting async state, failure recovery and local persistence. Six fictional tasks support search, pending/completed filters, details and completion saved on the device.
+A Flutter app for six fictional field tasks. Search and filter the list, read a task’s instructions and mark it complete. Completion is saved on the device and restored after a restart.
 
-Both `dev` and `prod` are demo flavors. No account, API key, location or backend is required. Task copy, data and the book icon are original; interface icons retain their framework licenses.
+The project shows asynchronous state, superseded requests, confirmed writes and recovery from storage failures. The task list ships with the app. No account, API key, location or backend is needed.
 
-| Pending board after saving one task | Saved task detail |
-|---|---|
-| ![Pending tasks](docs/images/board.png) | ![Saved task](docs/images/detail.png) |
-
-These are actual API 37 emulator captures of the redesigned normal app after saving one fictional task. They are not generated design concepts. The captured UI is English.
-
-## Interface design
-
-[DESIGN.md](DESIGN.md) explains the task-focused layout: a flat list, separate completion/detail actions, a meaningful count, labelled search and text that reflows. Notices are live regions. Outfit is bundled locally with its full OFL notice; loading the app makes no font-CDN request.
+<p>
+<img src="docs/images/board.png" alt="Bitácora pending tasks after completing one task" width="240">
+<img src="docs/images/detail.png" alt="Bitácora detail of a completed task" width="240">
+</p>
 
 ## Try it
 
-1. Open a task and mark it complete.
-2. Return to the board and compare All, Pending and Completed.
-3. Search Spanish titles with or without vowel accents.
-4. Open the science menu and select Simulated failure or Slow response.
-5. The bundled list remains available. Return to Available data to recover.
-6. Restart the app: acknowledged completion remains stored locally.
+1. Open a task, read its instructions and select **Mark complete**.
+2. Return to the list and compare All, Pending and Completed. Search by title; Spanish searches accept unaccented vowels.
+3. Open **Loading scenarios** with the science icon. Select Simulated failure or Slow response. The bundled tasks remain available.
+4. Choose **Normal loading** to recover.
+5. Restart the app to check that completion remains saved.
 
-The source scenarios affect only this demo. The catalog ships with the app; it is not a cached response from a production service.
+If saved status cannot be read, completion controls stay disabled and the app does not show a guessed completion count. If a write cannot be confirmed, the screen keeps the last confirmed state. **Reload tasks** reads the saved status before another attempt. Controller and widget tests exercise these failures without damaging real storage.
 
-## Run and verify
+## Run it
 
-Validated with **Flutter 3.38.7**, Dart 3.10.7, JDK 17 and Android SDK 36. Android requires API 24+. Dependencies and their hashes are recorded in `pubspec.lock`.
+Checked with **Flutter 3.38.7 / Dart 3.10.7**, **JDK 17** and **Android SDK 36**. Android requires API 24+. Versions and dependency hashes are recorded in `pubspec.lock`.
 
 ```sh
 flutter pub get --enforce-lockfile
 flutter analyze
 flutter test
 flutter run --flavor dev
-flutter build apk --debug --flavor prod
-flutter build appbundle --release --flavor prod
+flutter build apk --debug --flavor dev
+flutter build apk --release --flavor prod
 flutter build web --dart-define=APP_ENV=dev --no-web-resources-cdn --pwa-strategy=none
 ```
 
-Both Android flavors use `lib/main.dart`; the build flavor selects an explicit environment. Unsupported environment names fail instead of silently selecting another one. For web, `APP_ENV=dev` or `prod` selects the label; these names do not select live services.
+Both `dev` and `prod` are demos. Android gives them different application IDs and launcher names, so they keep separate local storage. Both use `lib/main.dart`. `APP_ENV` selects the web environment label; it does not select a live service. Unknown environment names fail explicitly. To generate an AAB, use `flutter build appbundle --release --flavor prod`.
 
-Flutter may select an Android Studio JDK before `JAVA_HOME`. If your shared installation selects an incompatible JDK, choose JDK 17 for this project through local Gradle configuration or `GRADLE_OPTS=-Dorg.gradle.java.home=/path/to/jdk-17`. Keep machine-specific paths outside version control. No production signing key is included or configured.
+Flutter may select Android Studio’s JDK before `JAVA_HOME`. Use JDK 17 for this project through local Gradle configuration or `GRADLE_OPTS=-Dorg.gradle.java.home=/path/to/jdk-17`. Keep local paths and signing keys outside version control. Production signing is not configured.
 
-Connected test and screenshot commands (replace the device ID):
+## Native checks and screenshots
+
+Replace `DEVICE_ID` with the target serial:
 
 ```sh
-flutter test integration_test/app_test.dart --flavor dev -d emulator-5554
-flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d emulator-5554 --keep-app-running
+flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
+flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-The integration journey resets this demo's completion IDs and leaves one fictional task completed. The capture driver writes the two reviewed PNGs in `docs/images/`.
+The integration test resets only this demo’s completion IDs, recreates its controller and leaves one fictional task completed. The opt-in driver writes the two PNGs in `docs/images/`. Run Flutter build/test/drive commands sequentially in one checkout because they share generated Android files. For a normal-process restart check after an integration build, rebuild or reinstall the normal entry point without clearing its preferences; see [verification](docs/VERIFICATION.md).
 
-## Read the implementation
+## Read the code
 
-- [`tasks.dart`](lib/domain/tasks.dart): models, source/store ports, request generations, deadline and acknowledged storage state.
-- [`completion_preferences.dart`](lib/data/completion_preferences.dart): actual preferences adapter.
-- [`main.dart`](lib/main.dart): explicit dependency graph, list/detail navigation and UI ownership.
-- [`copy.dart`](lib/l10n/copy.dart): English/Spanish resources and fallback.
-- [`controller_test.dart`](test/controller_test.dart): failure, recovery, stale results, disposal, timeout and immutable exposed state.
-- [`app_test.dart`](integration_test/app_test.dart): native persistence and captured UI.
+- [tasks.dart](lib/domain/tasks.dart): models, source/store contracts, request generations, time limit and confirmed completion state.
+- [completion_preferences.dart](lib/data/completion_preferences.dart): `SharedPreferencesAsync` adapter, storing only completed task IDs.
+- [main.dart](lib/main.dart): dependency construction, board/detail navigation, controller ownership and recovery actions.
+- [copy.dart](lib/l10n/copy.dart): Spanish/English resources with English fallback for unsupported languages.
+- [controller_test.dart](test/controller_test.dart): failures, late results, disposal, timeout and read-only state.
+- [widget_test.dart](test/widget_test.dart): navigation, filters, storage recovery, resizing and enlarged text.
+- [app_test.dart](integration_test/app_test.dart): actual Android preferences and optional captures.
 
-[Architecture and decisions](docs/ARCHITECTURE.md) explain why ignoring a stale Future differs from cancelling a transport, and why failed storage reads block edits.
+[Architecture](docs/ARCHITECTURE.md) explains why ignoring a superseded Future differs from cancelling transport, and why storage reads must succeed before editing. [DESIGN.md](DESIGN.md) records the layout, independent row actions and locally bundled Outfit font.
 
-## Verified scope
+## Checks and limits
 
-Local validation on 29 October 2026: **17 controller tests, six widget tests and one native persistence journey** passed. Analyzer reported no issues. Widget checks include a 360×800 viewport and 1.8 text scaling. Android dev/prod debug APKs, a prod release AAB and web output built successfully. The normal Android entry point retained the saved completion after APK replacement and a process restart.
+There are **26 controller/widget tests**: 17 controller and nine widget cases, including English/Spanish read/write recovery at 360×800 with 1.8 text scaling. [Verification](docs/VERIFICATION.md) separates the latest local runs, native persistence, browser checks, artifact audits and any failed attempts. The [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) runs Android/web checks and a separate API 35 integration job.
 
-The visual revision rechecks analyzer and all 23 tests, the native preferences journey, normal-app completion/process restart, English/Spanish, simulated source failure and text scaling 1.8 at 360 × 800. Dev debug and prod release APKs and the web output build. Earlier dev/prod debug, release AAB and browser checks retain their original scope. The current release APK audit measures 0.95 MB DEX and 16 KB native/ZIP alignment, with a warning that R8 rate metadata is unavailable. This is not store approval. iOS and physical devices have not been validated.
-
-[GitHub Actions](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml): analyzer and the complete test suite, Android dev/prod builds, optimized prod bundle, web build and the native API 35 emulator journey. Local native checks used API 37.
+The source export includes Android and web. Native iOS and physical devices have not been validated. Release enables R8/resource shrinking, but there is no production signing or store release. Artifact audits are advisory. Widget/emulator checks are not a formal accessibility certification.
 
 ## License
 
-Original application code, copy, data and vector artwork: [MIT](LICENSE), copyright 2026 Manuel Naval. Flutter/platform shells and dependencies retain their licenses; see [third-party notices](THIRD_PARTY.md).
-
-Native CI runs the persistence journey without screenshot-surface conversion. Screenshot capture is opt-in through the documented define and driver. `tools/run_android_integration.sh` is a Linux CI wrapper with an explicit emulator serial, bounded execution and filtered crash/launch diagnostics; it never retries or suppresses a failing result.
+Original application code, text, data and vector artwork: [MIT](LICENSE), Manuel Naval, 2026. Flutter shells, fonts and dependencies retain their licenses in [third-party notices](THIRD_PARTY.md).
