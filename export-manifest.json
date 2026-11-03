@@ -1,7 +1,7 @@
 [
   {
     "path": ".github/workflows/checks.yml",
-    "sha256": "152adedf6dc044e0f7fdd9750f28828bd5f4f39b8a58acca57e6739d1024a788"
+    "sha256": "23cd7ecbd131aba2131e854285e497ca6365f9116ead918fbda2275367669a06"
   },
   {
     "path": ".gitignore",
@@ -129,7 +129,7 @@
   },
   {
     "path": "docs/VERIFICATION.md",
-    "sha256": "ba42e0b4d7d0a634cc2e15f65537160c7d7d7bf9c6100d8e20c3bbc7c1305e6b"
+    "sha256": "b8a14683461abf84074f812e4e8b474969f999283cdc96b5363d9d27a2914450"
   },
   {
     "path": "docs/images/board.png",
@@ -221,7 +221,7 @@
   },
   {
     "path": "tools/run_android_integration.sh",
-    "sha256": "3976c92644e0a093aa428572f69c07d1cfb9cf40cf9d96c420cc897ff4bda0b1"
+    "sha256": "5649149b0b1d505cb327c087dff23e27b4d64f4b5ba16512983f49e3a3dd6d05"
   },
   {
     "path": "web/favicon.svg",

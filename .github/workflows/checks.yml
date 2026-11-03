@@ -88,6 +88,10 @@ jobs:
           flutter config --jdk-dir "$JAVA_HOME"
           sdkmanager 'platforms;android-36' 'build-tools;35.0.0'
           flutter pub get --enforce-lockfile
+      - name: Build integration APK before starting the emulator
+        run: |
+          flutter build apk --debug --flavor dev --target integration_test/app_test.dart
+          (cd android && ./gradlew --stop)
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm.rules
