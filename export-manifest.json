@@ -129,7 +129,7 @@
   },
   {
     "path": "docs/VERIFICATION.md",
-    "sha256": "6b9b5593e362473c6bdba3195a91ec7a5442e0c22b70346af757916c67213c27"
+    "sha256": "45929a8346b79c301fcc99707753452dfd81672f54ab8253a6b604b9137c9e3a"
   },
   {
     "path": "docs/images/board.png",
@@ -217,7 +217,7 @@
   },
   {
     "path": "tools/run_android_integration.sh",
-    "sha256": "cd962c4bb4b820e48123ac60100be4ebb58ea81fd10f4447f2237e810741d588"
+    "sha256": "f26de06afdc09ca2479d14b8e7a07e6b605c29ef23beac1ea61691dcf641e1b7"
   },
   {
     "path": "web/favicon.svg",

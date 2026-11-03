@@ -2,6 +2,8 @@
 
 ## Gradle patch and cache ownership · 3 November 2026
 
+The initial device job at `6dd0f24` failed before executing any case: first the VM service disappeared, then one controlled rerun could not start Dart Development Service. Android diagnostics did not establish the root cause. The native runner now requests Flutter's supported `--no-dds` mode, connecting directly to the VM while retaining the same two test cases, explicit serial, timeout, failure diagnostics and nonzero exit propagation. No automatic retries are added. Validation of this harness change is pending. See the [Flutter integration runner](https://github.com/flutter/flutter/blob/3.38.7/packages/flutter_tools/lib/src/test/integration_test_device.dart).
+
 Both wrappers now use Gradle 8.14.6. The distribution and wrapper JAR were checked against official SHA-256 values, and the wrapper was generated from that verified distribution. The patch includes fixes described in the [Gradle release notes](https://docs.gradle.org/8.14.6/release-notes.html). JDK 17, SDK 36, plugin/dependency versions and application source are unchanged.
 
 The device job reads the basic Gradle cache; only the build/checks job may save it on the default branch. This avoids competing writes to the same key. No caches were deleted. The Gradle action still reports Gradle 8 as behind Gradle 9 because its support classifier compares major versions. That notice is retained; a major upgrade needs a separate Kotlin/AGP/Flutter compatibility review.
