@@ -50,7 +50,7 @@ flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
 flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-Los dos casos de integración reinician solo los IDs completados de esta demo, reconstruyen el controlador y dejan Alba y Cedro completadas. El segundo inyecta un error de confirmación después de una escritura real y comprueba bloqueo y recuperación mediante relectura. El driver opcional guarda los dos PNG en `docs/images/`. Ejecuta los comandos Flutter de build, test y drive en secuencia dentro de un mismo checkout: comparten archivos Android generados. `flutter test` desinstala la app de integración al terminar. Para conservar sus IDs al comprobar el reinicio del proceso normal, usa el comando `flutter drive --keep-app-running` anterior y reinstala el APK normal conservado sin borrar preferencias; consulta [verificación](docs/VERIFICATION.md), en inglés.
+Los tres casos de integración reinician solo los IDs completados de esta demo, reconstruyen el controlador y dejan Alba y Cedro completadas. El segundo inyecta un error de confirmación después de una escritura real y comprueba bloqueo y recuperación mediante relectura. El tercero comprueba que cambiar el catálogo oculta IDs guardados sin borrarlos en la siguiente edición; la suite deja además un ID futuro ficticio oculto. El driver opcional guarda los dos PNG en `docs/images/`. Ejecuta los comandos Flutter de build, test y drive en secuencia dentro de un mismo checkout: comparten archivos Android generados. `flutter test` desinstala la app de integración al terminar. Para conservar sus IDs al comprobar el reinicio del proceso normal, usa el comando `flutter drive --keep-app-running` anterior y reinstala el APK normal conservado sin borrar preferencias; consulta [verificación](docs/VERIFICATION.md), en inglés.
 
 ## Leer el código
 
@@ -66,7 +66,7 @@ Los dos casos de integración reinician solo los IDs completados de esta demo, r
 
 ## Comprobaciones y límites
 
-Hay **31 pruebas de controlador/widgets**: 20 del controlador y 11 de widgets, incluidas lectura/escritura fallidas y recuperación ES/EN a 360 × 800 con texto 1,8. [Verificación](docs/VERIFICATION.md) separa ejecuciones locales, persistencia nativa, navegador, auditoría de artefactos e intentos fallidos. El [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) comprueba Android/web y tiene un job de integración en API 35.
+Hay **37 pruebas de controlador/widgets**: 24 del controlador y 13 de widgets, incluidas lectura/escritura fallidas y recuperación ES/EN a 360 × 800 con texto 1,8. [Verificación](docs/VERIFICATION.md) separa ejecuciones locales, persistencia nativa, navegador, auditoría de artefactos e intentos fallidos. El [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) comprueba Android/web y tiene un job de integración en API 35.
 
 La exportación incluye Android y web. No se han validado iOS nativo ni dispositivos físicos. Release activa R8 y reducción de recursos, sin firma de producción ni publicación en tiendas. Las auditorías de artefactos son consultivas. Las pruebas de widgets/emulador no son una certificación formal de accesibilidad.
 

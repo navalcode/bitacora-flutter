@@ -1,5 +1,20 @@
 # Verification record
 
+## Hidden completion IDs · 3 November 2026
+
+A saved ID outside the current catalog is now retained in later writes. The public completed set, filters and count include only current tasks; removing and returning a task changes that projection without changing stored confirmations. Previously, the first edit discarded unrecognized IDs, while a later catalog replacement could leave an incorrect count.
+
+- Four new controller tests fail against the previous implementation, with the existing 20 passing. After the fix, **37 controller/widget tests pass**: 24 controller and 13 widget cases. They cover completing/reopening with hidden IDs, removal/return, a catalog replacement during a pending write and reconciliation after an unconfirmed save. New ES/EN widget cases check the count and saved values at 360×800 with text scale 1.8.
+- Locked dependencies and analyzer pass. Android dev debug, prod release and web builds pass with the pinned toolchain. Preference key/format, dependencies, design and workflow remain unchanged.
+- **Three native cases pass** on API 37 in English/scale 1.0 and Spanish/scale 1.8, 360×800. The new case uses the actual preferences adapter, replaces the catalog, edits a known task, then reconstructs the controller. `+4` in the integration log includes teardown; there are three application cases.
+- The retained normal APK is reinstalled without clearing data. Two normal-process launches show different PIDs, both restore Alba/Cedar and show 2/6. The preference document stays byte-identical and retains the hidden fictional ID. The second launch follows verified termination/absence of the first normal process. These are debug-emulator checks, not release-runtime or physical-device results.
+- The compiled web app saves two tasks, opens detail/Back and restores both checked tasks after page reload. One earlier reload reports a failed Cupertino font fetch; the asset exists, responds HTTP 200 with identical bytes, and a fresh reload adds no warning. The initial observation is retained; its cause is not established.
+- Four APKs (normal debug/release and two language-specific integration builds) receive advisory audits: DEX 13.53/0.95 MB for normal builds; ELF and APK ZIP 16 KB alignment checks pass. APK R8 percentage metadata is absent. The audit does not certify store policy, optimization percentages or Dart AOT behavior.
+
+Hosted CI for this increment is pending publication. Earlier results below retain their tested commits. Source exports and website counts must be reviewed against their current remote trees before publication. No iOS SDK/simulator, production signing, automatic pruning or multi-writer transaction guarantee is added.
+
+## Earlier toolchain and recovery records
+
 ## Gradle patch and cache ownership · 3 November 2026
 
 The workflow that cleans generated outputs between general builds and retains the integration APK in runner temporary storage passes at `b725a5c` in [run 41624248361](https://github.com/navalcode/bitacora-flutter/actions/runs/41624248361) and the subsequent [full cache-restore run 41625124957](https://github.com/navalcode/bitacora-flutter/actions/runs/41625124957). Both jobs pass in each run, including both API 35 native cases driven from the prebuilt binary. The earlier VM/DDS, golden-relay, ADB-offline and disk-exhaustion failures are retained above; successful direct connection is a verified mitigation, not proof of DDS's root cause. Logs confirm both jobs restore the exact initial Gradle cache key, with device access read-only and no save attempt or reservation warning. The Gradle 8-versus-9 notice is retained. Workflows upload reports or web assets rather than Android APK/AAB files; local audits above are not audits of cloud packages.

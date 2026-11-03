@@ -62,6 +62,49 @@ void main() {
 
   for (final language in ['en', 'es']) {
     testWidgets(
+      '$language counts only current tasks while retaining hidden saved IDs',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = 1.8;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final store = MemoryStore()..ids = {'alba', 'future-task'};
+        final source = ImmediateSource();
+        final model = TaskController(source, store);
+        await model.initialize();
+        await tester.pumpWidget(
+          BitacoraApp(
+            model: model,
+            environment: AppEnvironment.dev,
+            locale: Locale(language),
+          ),
+        );
+        await tester.pumpAndSettle();
+        final count = language == 'en' ? 'Completed' : 'Completadas';
+        expect(find.text('$count: 1 / 6'), findsOneWidget);
+        source.tasks = [bundledTasks[1]];
+        await model.refresh();
+        await tester.pumpAndSettle();
+        expect(find.text('$count: 0 / 1'), findsOneWidget);
+        await showItem(tester, find.byKey(const ValueKey('complete-cedro')));
+        await tester.tap(find.byKey(const ValueKey('complete-cedro')));
+        await tester.pumpAndSettle();
+        expect(store.ids, {'alba', 'cedro', 'future-task'});
+        source.tasks = bundledTasks;
+        await model.refresh();
+        await tester.pumpAndSettle();
+        await showItem(tester, find.text('$count: 2 / 6'), step: -150);
+        expect(find.text('$count: 2 / 6'), findsOneWidget);
+        expect(model.completed, {'alba', 'cedro'});
+        expect(tester.takeException(), isNull);
+        await tester.pumpWidget(const SizedBox.shrink());
+        await tester.pumpAndSettle();
+      },
+    );
+
+    testWidgets(
       '$language storage read failure explains recovery and blocks writes',
       (tester) async {
         tester.view.physicalSize = const Size(360, 800);

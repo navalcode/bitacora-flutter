@@ -50,7 +50,7 @@ flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
 flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-The two integration cases reset only this demo’s completion IDs, recreate the controller and leave Alba and Cedar completed. The second case injects a lost acknowledgement after an actual preferences write, then checks blocked edits and reload recovery. The opt-in driver writes the two PNGs in `docs/images/`. Run Flutter build/test/drive commands sequentially in one checkout because they share generated Android files. `flutter test` uninstalls the integration app during cleanup. To carry its saved IDs into a normal-process restart check, use the `flutter drive --keep-app-running` command above, then reinstall the retained normal APK without clearing preferences; see [verification](docs/VERIFICATION.md).
+The three integration cases reset only this demo’s completion IDs, recreate the controller and leave Alba and Cedar completed. The second case injects a lost acknowledgement after an actual preferences write, then checks blocked edits and reload recovery. The third verifies that catalog changes hide saved IDs without deleting them on the next edit; the suite also leaves one hidden fictional future ID. The opt-in driver writes the two PNGs in `docs/images/`. Run Flutter build/test/drive commands sequentially in one checkout because they share generated Android files. `flutter test` uninstalls the integration app during cleanup. To carry its saved IDs into a normal-process restart check, use the `flutter drive --keep-app-running` command above, then reinstall the retained normal APK without clearing preferences; see [verification](docs/VERIFICATION.md).
 
 ## Read the code
 
@@ -66,7 +66,7 @@ The two integration cases reset only this demo’s completion IDs, recreate the 
 
 ## Checks and limits
 
-There are **31 controller/widget tests**: 20 controller and 11 widget cases, including English/Spanish read/write recovery at 360×800 with 1.8 text scaling. [Verification](docs/VERIFICATION.md) separates the latest local runs, native persistence, browser checks, artifact audits and any failed attempts. The [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) runs Android/web checks and a separate API 35 integration job.
+There are **37 controller/widget tests**: 24 controller and 13 widget cases, including English/Spanish read/write recovery at 360×800 with 1.8 text scaling. [Verification](docs/VERIFICATION.md) separates the latest local runs, native persistence, browser checks, artifact audits and any failed attempts. The [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) runs Android/web checks and a separate API 35 integration job.
 
 The source export includes Android and web. Native iOS and physical devices have not been validated. Release enables R8/resource shrinking, but there is no production signing or store release. Artifact audits are advisory. Widget/emulator checks are not a formal accessibility certification.
 

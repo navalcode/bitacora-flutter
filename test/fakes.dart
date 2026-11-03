@@ -27,10 +27,11 @@ class MemoryStore implements CompletionStore {
 }
 
 class ImmediateSource implements TaskSource {
+  List<FieldTask> tasks = bundledTasks;
   @override
   Future<List<FieldTask>> fetch(DemoScenario scenario) async {
     if (scenario == DemoScenario.offline) throw DemoOffline();
-    return bundledTasks;
+    return tasks;
   }
 }
 

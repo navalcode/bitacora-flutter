@@ -169,6 +169,53 @@ void main() {
     restored.dispose();
     // Leave both completions for a separate normal-process restart check.
   });
+  testWidgets('native edits preserve IDs hidden by catalog changes', (
+    tester,
+  ) async {
+    final preferences = PreferencesCompletionStore(SharedPreferencesAsync());
+    await preferences.save({'alba', 'future-task'});
+    final source = MutableCatalogSource();
+    final model = TaskController(source, preferences);
+    await model.initialize();
+    await tester.pumpWidget(
+      BitacoraApp(
+        model: model,
+        environment: AppEnvironment.dev,
+        locale: const Locale(language),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final count = language == 'en' ? 'Completed' : 'Completadas';
+    expect(find.text('$count: 1 / 6'), findsOneWidget);
+    source.tasks = [bundledTasks[1]];
+    await model.refresh();
+    await tester.pumpAndSettle();
+    expect(find.text('$count: 0 / 1'), findsOneWidget);
+    await reveal(tester, find.byKey(const ValueKey('complete-cedro')));
+    await tester.tap(find.byKey(const ValueKey('complete-cedro')));
+    await tester.pumpAndSettle();
+    expect(await preferences.load(), {'alba', 'cedro', 'future-task'});
+    source.tasks = bundledTasks;
+    await model.refresh();
+    await tester.pumpAndSettle();
+    await reveal(tester, find.text('$count: 2 / 6'), step: -150);
+    expect(find.text('$count: 2 / 6'), findsOneWidget);
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    final restored = TaskController(BundledTaskSource(), preferences);
+    await restored.initialize();
+    expect(restored.completed, {'alba', 'cedro'});
+    expect(await preferences.load(), {'alba', 'cedro', 'future-task'});
+    restored.dispose();
+    // Normal entry-point restart checks can now verify the two known IDs
+    // while inspecting that this fictional unknown ID remains in preferences.
+  });
+}
+
+class MutableCatalogSource implements TaskSource {
+  List<FieldTask> tasks = bundledTasks;
+  @override
+  Future<List<FieldTask>> fetch(DemoScenario scenario) async => tasks;
 }
 
 /// Injects an acknowledgement error after the real native adapter has saved.

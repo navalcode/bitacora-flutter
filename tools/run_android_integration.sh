@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Two native cases, one invocation, no automatic retries. Diagnostics use the isolated CI emulator and runner.
+# Native cases, one invocation, no automatic retries. Diagnostics use the isolated CI emulator and runner.
 # The official integration driver uses a direct VM connection without the test command golden relay.
 set -euo pipefail
 serial="${1:?Pass the explicit emulator serial}"

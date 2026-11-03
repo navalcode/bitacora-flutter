@@ -129,7 +129,9 @@ class TaskController extends ChangeNotifier {
   final CompletionStore store;
   final Duration timeout;
   List<FieldTask> _items = bundledTasks;
-  Set<String> _completed = {};
+  // Retain the full confirmed document. The catalog only limits what the UI
+  // displays; it must not erase IDs from another catalog version on save.
+  Set<String> _confirmedIDs = {};
   String _query = '';
   TaskFilter _filter = TaskFilter.all;
   DemoScenario _scenario = DemoScenario.connected;
@@ -142,7 +144,9 @@ class TaskController extends ChangeNotifier {
   int _initialization = 0;
 
   List<FieldTask> get items => List.unmodifiable(_items);
-  Set<String> get completed => Set.unmodifiable(_completed);
+  Set<String> get completed => Set.unmodifiable(
+    _confirmedIDs.intersection(_items.map((task) => task.id).toSet()),
+  );
   String get query => _query;
   TaskFilter get filter => _filter;
   DemoScenario get scenario => _scenario;
@@ -157,7 +161,7 @@ class TaskController extends ChangeNotifier {
       (task) =>
           (_filter == TaskFilter.all ||
               (_filter == TaskFilter.completed) ==
-                  _completed.contains(task.id)) &&
+                  _confirmedIDs.contains(task.id)) &&
           _searchKey(task.title(language)).contains(_searchKey(_query)),
     ),
   );
@@ -170,8 +174,7 @@ class TaskController extends ChangeNotifier {
     try {
       final ids = await store.load();
       if (_disposed || attempt != _initialization) return;
-      final known = _items.map((task) => task.id).toSet();
-      _completed = ids.intersection(known);
+      _confirmedIDs = Set.of(ids);
       _storageReady = true;
       _storageError = false;
     } catch (_) {
@@ -226,15 +229,15 @@ class TaskController extends ChangeNotifier {
     if (!_items.any((task) => task.id == id)) {
       throw ArgumentError.value(id, 'id', 'Unknown task');
     }
-    if (_completed.contains(id) == value) return;
-    final updated = {..._completed};
+    if (_confirmedIDs.contains(id) == value) return;
+    final updated = {..._confirmedIDs};
     value ? updated.add(id) : updated.remove(id);
     _saving = true;
     notifyListeners();
     try {
       await store.save(Set.unmodifiable(updated));
       if (_disposed) return;
-      _completed = updated;
+      _confirmedIDs = updated;
       _storageError = false;
     } catch (_) {
       if (!_disposed) _storageError = true;

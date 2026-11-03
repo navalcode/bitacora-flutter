@@ -23,6 +23,93 @@ void main() {
   });
 
   test(
+    'hidden saved IDs survive completing and reopening a known task',
+    () async {
+      store.ids = {'future-task'};
+      await model.initialize();
+      expect(model.completed, isEmpty);
+      await model.setCompleted('alba', true);
+      expect(store.ids, {'future-task', 'alba'});
+      expect(model.completed, {'alba'});
+      await model.setCompleted('alba', false);
+      expect(store.ids, {'future-task'});
+      expect(model.completed, isEmpty);
+    },
+  );
+
+  test('catalog changes hide and reveal saved IDs without writing', () async {
+    final source = ImmediateSource();
+    final controller = TaskController(source, store);
+    store.ids = {'alba', 'future-task'};
+    await controller.initialize();
+    source.tasks = [bundledTasks[1]];
+    await controller.refresh();
+    expect(controller.completed, isEmpty);
+    expect(controller.items, hasLength(1));
+    source.tasks = [
+      ...bundledTasks,
+      const FieldTask(
+        'future-task',
+        TaskArea.review,
+        'Tarea futura',
+        'Future task',
+        'Registro ficticio de prueba.',
+        'Fictional test record.',
+      ),
+    ];
+    await controller.refresh();
+    expect(controller.completed, {'alba', 'future-task'});
+    controller.filterChanged(TaskFilter.completed);
+    expect(controller.visible('en').map((task) => task.id), [
+      'alba',
+      'future-task',
+    ]);
+    expect(store.writes, 0);
+    expect(store.ids, {'alba', 'future-task'});
+    controller.dispose();
+  });
+
+  test(
+    'catalog replacement during a save preserves hidden confirmations',
+    () async {
+      final source = ImmediateSource();
+      final controller = TaskController(source, store);
+      store.ids = {'future-task'};
+      await controller.initialize();
+      store.gate = Completer<void>();
+      final saving = controller.setCompleted('alba', true);
+      source.tasks = [bundledTasks[1]];
+      await controller.refresh();
+      store.gate!.complete();
+      await saving;
+      expect(controller.completed, isEmpty);
+      expect(store.ids, {'future-task', 'alba'});
+      await controller.setCompleted('cedro', true);
+      expect(controller.completed, {'cedro'});
+      expect(store.ids, {'future-task', 'alba', 'cedro'});
+      source.tasks = bundledTasks;
+      await controller.refresh();
+      expect(controller.completed, {'alba', 'cedro'});
+      controller.dispose();
+    },
+  );
+
+  test('reconciliation retains hidden IDs after an unconfirmed save', () async {
+    store.ids = {'future-task'};
+    await model.initialize();
+    store.failAfterSave = true;
+    await model.setCompleted('alba', true);
+    expect(store.ids, {'future-task', 'alba'});
+    expect(model.completed, isEmpty);
+    expect(model.canEdit, isFalse);
+    store.failAfterSave = false;
+    await model.initialize();
+    expect(model.completed, {'alba'});
+    await model.setCompleted('cedro', true);
+    expect(store.ids, {'future-task', 'alba', 'cedro'});
+  });
+
+  test(
     'failed reads block writes instead of overwriting unknown stored state',
     () async {
       store.failLoad = true;
