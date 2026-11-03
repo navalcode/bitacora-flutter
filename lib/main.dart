@@ -227,7 +227,7 @@ class _TaskBoardState extends State<TaskBoard> {
                         child: Checkbox(
                           key: ValueKey('complete-${task.id}'),
                           value: model.completed.contains(task.id),
-                          onChanged: !model.storageReady || model.saving
+                          onChanged: !model.canEdit
                               ? null
                               : (value) => unawaited(
                                   model.setCompleted(task.id, value!),
@@ -328,7 +328,7 @@ class TaskDetail extends StatelessWidget {
                   ),
                 FilledButton.icon(
                   key: const ValueKey('detail-complete'),
-                  onPressed: !model.storageReady || model.saving
+                  onPressed: !model.canEdit
                       ? null
                       : () => unawaited(model.setCompleted(id, !completed)),
                   icon: Icon(completed ? Icons.undo : Icons.check),

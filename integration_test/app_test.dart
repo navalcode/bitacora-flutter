@@ -89,4 +89,118 @@ void main() {
     await tester.pumpAndSettle();
     // Leave this one fictional completion for a separate process-restart smoke check.
   });
+
+  testWidgets('native saved IDs survive a lost write acknowledgement', (
+    tester,
+  ) async {
+    final preferences = PreferencesCompletionStore(SharedPreferencesAsync());
+    await preferences.save({});
+    final model = TaskController(
+      BundledTaskSource(),
+      LoseFirstAcknowledgement(preferences),
+    );
+    await model.initialize();
+    await tester.pumpWidget(
+      BitacoraApp(
+        model: model,
+        environment: AppEnvironment.dev,
+        locale: const Locale(language),
+      ),
+    );
+    await tester.pumpAndSettle();
+    await reveal(tester, find.byKey(const ValueKey('task-alba')));
+    await tester.tap(
+      find.text(
+        language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+      ),
+    );
+    await tester.pumpAndSettle();
+    await reveal(tester, find.byKey(const ValueKey('detail-complete')));
+    await tester.tap(find.byKey(const ValueKey('detail-complete')));
+    await tester.pumpAndSettle();
+    expect(await preferences.load(), {'alba'});
+    expect(model.completed, isEmpty);
+    await reveal(tester, find.byKey(const ValueKey('detail-complete')));
+    expect(
+      tester
+          .widget<FilledButton>(find.byKey(const ValueKey('detail-complete')))
+          .onPressed,
+      isNull,
+    );
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    for (final id in ['alba', 'cedro']) {
+      await reveal(tester, find.byKey(ValueKey('complete-$id')));
+      expect(
+        tester.widget<Checkbox>(find.byKey(ValueKey('complete-$id'))).onChanged,
+        isNull,
+      );
+    }
+    // Direct calls are protected too; disabling widgets alone is insufficient.
+    await model.setCompleted('cedro', true);
+    expect(await preferences.load(), {'alba'});
+    final reload = language == 'en' ? 'Reload tasks' : 'Recargar tareas';
+    await reveal(tester, find.text(reload), step: -150);
+    await tester.tap(find.text(reload));
+    await tester.pumpAndSettle();
+    expect(model.completed, {'alba'});
+    await reveal(
+      tester,
+      find.byKey(const ValueKey('complete-cedro')),
+      step: -150,
+    );
+    expect(
+      tester
+          .widget<Checkbox>(find.byKey(const ValueKey('complete-cedro')))
+          .onChanged,
+      isNotNull,
+    );
+    await tester.tap(find.byKey(const ValueKey('complete-cedro')));
+    await tester.pumpAndSettle();
+    expect(await preferences.load(), {'alba', 'cedro'});
+    await tester.pumpWidget(const SizedBox.shrink());
+    await tester.pumpAndSettle();
+    final restored = TaskController(
+      BundledTaskSource(),
+      PreferencesCompletionStore(SharedPreferencesAsync()),
+    );
+    await restored.initialize();
+    expect(restored.completed, {'alba', 'cedro'});
+    restored.dispose();
+    // Leave both completions for a separate normal-process restart check.
+  });
+}
+
+/// Injects an acknowledgement error after the real native adapter has saved.
+/// It does not simulate a disk failure or change the normal application entry point.
+class LoseFirstAcknowledgement implements CompletionStore {
+  LoseFirstAcknowledgement(this.delegate);
+  final CompletionStore delegate;
+  bool failed = false;
+  @override
+  Future<Set<String>> load() => delegate.load();
+  @override
+  Future<void> save(Set<String> ids) async {
+    await delegate.save(ids);
+    if (!failed) {
+      failed = true;
+      throw StateError('Synthetic lost acknowledgement after native save');
+    }
+  }
+}
+
+Future<void> reveal(
+  WidgetTester tester,
+  Finder target, {
+  double step = 150,
+}) async {
+  await tester.scrollUntilVisible(
+    target,
+    step,
+    scrollable: find.byWidgetPredicate(
+      (widget) =>
+          widget is Scrollable && widget.axisDirection == AxisDirection.down,
+    ),
+  );
+  await tester.pumpAndSettle();
 }

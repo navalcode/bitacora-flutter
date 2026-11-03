@@ -1,5 +1,27 @@
 # Verification record
 
+## Unconfirmed write recovery · 3 November 2026
+
+This revision prevents a subsequent edit from overwriting an earlier save whose acknowledgement failed. `CompletionStore.save` errors do not promise rollback. `canEdit` protects the controller, list checkboxes and detail action until saved IDs are reloaded successfully. A catalog refresh cannot reopen editing. The last confirmed UI state remains visible; a reload may reveal that the unacknowledged write already succeeded.
+
+- **31 controller/widget tests pass**: 20 controller and 11 widget cases. New coverage includes an error before/after writing, blocked edits after catalog refresh, a pending/failed reconciliation read, and a successful reload followed by a second edit without losing the first ID. List and detail are checked in English/Spanish at 360 × 800 with text scale 1.8.
+- The expanded suite was run against the unchanged implementation first: 25 passed and six failed on behavior assertions after correcting the test's scroll positioning. All 31 pass after the controller/UI fix. An intermediate run found two test-harness problems: English-only `pageBack()` with a Spanish tooltip, and a row title obscured by the app bar after scrolling to its checkbox. The tests now tap the actual BackButton and reveal the title action; hit-test warnings remain fatal.
+- Locked dependency resolution, analyzer, Android `dev` debug / `prod` optimized release and web builds pass. Dependency versions, lockfile, preference key/format, product copy and layout are unchanged. Gradle uses JDK 17.0.14; Flutter may start the launcher with Android Studio's JDK, as described in the README.
+- Two native integration cases pass on the dedicated API 37 emulator at 360 × 800 in English / scale 1.0 and Spanish / scale 1.8. The new case writes with `PreferencesCompletionStore`, then a test-only wrapper throws an acknowledgement error. It checks disabled list/detail controls, rejection of a direct controller edit, successful reread, both saved IDs and reconstruction with a fresh controller. This injects a lost acknowledgement, not a disk or plugin fault.
+- Normal debug APK process restart passes twice after a retained `flutter drive` run and reinstalling the original normal APK without clearing preferences. Its installed hash matches the retained build; distinct PIDs (4730 and 4829) show `Completed: 2 / 6` with Alba checked. This is separate from reconstructing a controller in the integration test. The emulator’s `am start -W` wait reported timeouts before UI readiness; the smoke check then waited for the actual hierarchy and confirmed state. No startup-time or device-performance claim is made.
+- The normal web bundle was exercised in Spanish at 1366 × 768 and 360 × 800: detail completion, second completion from the list, both completions after full reload, empty search/clear, simulated source failure and Normal loading recovery. No document overflow or warning/error console entries observed. Browser storage faults and an English browser journey were not exercised in this block.
+
+Advisory audits: debug **13.53 MB DEX**, release **0.95 MB DEX**, native ELF / APK ZIP 16 KB checks pass. Percentage R8 metrics are absent; the overall advisory verdict does not prove an optimization percentage, official store policy or acceptance. No new physical-device, iOS, formal accessibility, production signing or release-runtime result is claimed.
+
+The opt-in capture driver still captures the first preferences journey with one completion. The full suite now ends with Alba and Cedar completed; normal-process checks must expect **2 / 6**, not the earlier one-completion fixture. Run Flutter build/test/drive commands sequentially and retain a normal APK before running integration. Flutter 3.38.7’s `flutter test` device cleanup stops and uninstalls its integration app. Use the documented `flutter drive --keep-app-running` command to retain preferences before replacing that APK with the normal entry point. The first normal-restart attempt after `flutter test` saw zero completions from the fresh install and is retained as an unsuccessful harness setup, not an app persistence failure.
+
+Current normal artifact SHA-256:
+
+- `app-dev-debug.apk`: `3e81145c0c41b1ea7b9b48e45918620665a808ad6d69cfbb252fddf344261e68`.
+- `app-prod-release.apk`: `b489a5bf4bb32abf4b1ca4cb1e2575ded386fc00b1e5ca4cf5afa26e7c1a6194`.
+
+## Earlier editorial verification · 30 October 2026
+
 30 October 2026. This revision rewrites task instructions and recovery messages, distinguishes storage reads from unconfirmed writes, and hides the completed count until saved status has been read. The source/store algorithms and dependency lock remain unchanged.
 
 ## Local checks

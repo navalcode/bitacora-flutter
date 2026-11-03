@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One real journey, no automatic retries. Diagnostics contain only the fictional CI app.
+# Two native cases, one invocation, no automatic retries. Diagnostics contain only the fictional CI app.
 set -euo pipefail
 serial="${1:?Pass the explicit emulator serial}"
 mkdir -p artifacts

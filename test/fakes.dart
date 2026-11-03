@@ -5,10 +5,13 @@ class MemoryStore implements CompletionStore {
   Set<String> ids = {};
   bool failLoad = false;
   bool failSave = false;
+  bool failAfterSave = false;
   int writes = 0;
   Completer<void>? gate;
+  Completer<void>? loadGate;
   @override
   Future<Set<String>> load() async {
+    if (loadGate != null) await loadGate!.future;
     if (failLoad) throw StateError('Synthetic read failure');
     return {...ids};
   }
@@ -19,6 +22,7 @@ class MemoryStore implements CompletionStore {
     if (gate != null) await gate!.future;
     if (failSave) throw StateError('Synthetic write failure');
     ids = {...value};
+    if (failAfterSave) throw StateError('Synthetic lost acknowledgement');
   }
 }
 

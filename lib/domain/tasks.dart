@@ -95,6 +95,9 @@ const bundledTasks = [
 
 abstract interface class CompletionStore {
   Future<Set<String>> load();
+
+  /// Success confirms the write. An error does not guarantee rollback;
+  /// callers must reload before basing another write on their previous state.
   Future<void> save(Set<String> ids);
 }
 
@@ -147,6 +150,7 @@ class TaskController extends ChangeNotifier {
   bool get storageReady => _storageReady;
   bool get storageError => _storageError;
   bool get saving => _saving;
+  bool get canEdit => !_disposed && _storageReady && !_storageError && !_saving;
 
   List<FieldTask> visible(String language) => List.unmodifiable(
     _items.where(
@@ -218,7 +222,7 @@ class TaskController extends ChangeNotifier {
   }
 
   Future<void> setCompleted(String id, bool value) async {
-    if (_disposed || !_storageReady || _saving) return;
+    if (!canEdit) return;
     if (!_items.any((task) => task.id == id)) {
       throw ArgumentError.value(id, 'id', 'Unknown task');
     }

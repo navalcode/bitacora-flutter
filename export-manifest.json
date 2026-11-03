@@ -17,11 +17,11 @@
   },
   {
     "path": "README.es.md",
-    "sha256": "4613ec7e15a7baea0f37f2afc6ec96d7c768b7ac35ae99baf11ed674a84ce94f"
+    "sha256": "9712190b894d35b5044b09c62e15c478b89b3ace8b0f17a2f99a59d33bd3ae94"
   },
   {
     "path": "README.md",
-    "sha256": "d0c092322022fcd2fede430550d582ae681ca7907e4e348a9be7516cf925c3b9"
+    "sha256": "3e19f5a32d9160f4c0c92ec149dd87e6edd396b7bc02ec7a897ac4980f69dc98"
   },
   {
     "path": "THIRD_PARTY.md",
@@ -125,11 +125,11 @@
   },
   {
     "path": "docs/ARCHITECTURE.md",
-    "sha256": "74a897d5259f6078333db58bea0d9663f71647a6397cbc6678a853c79710cb0c"
+    "sha256": "267edc29ba082814d1ec4c93a46b271c1cc5d83aac04ad96cd1a919c80dbc707"
   },
   {
     "path": "docs/VERIFICATION.md",
-    "sha256": "4adf6dc80cfc5ffb1bc34fad3fce59e338a7e7c7d78595a63f6ca83e41035259"
+    "sha256": "2cf7f9e711c53a11b255cc8d17377412de741ee1d03c386c9d6e898510ba55e1"
   },
   {
     "path": "docs/images/board.png",
@@ -157,7 +157,7 @@
   },
   {
     "path": "integration_test/app_test.dart",
-    "sha256": "1aeee9660dbf0ac4154b0dfbc163c2c646bbce2cf5cc56912a0cd45c1f957ce7"
+    "sha256": "fd2eda10d9fdd06280ace99095d172ddf04e41198f52a4dab979760fb326942c"
   },
   {
     "path": "lib/data/completion_preferences.dart",
@@ -165,7 +165,7 @@
   },
   {
     "path": "lib/domain/tasks.dart",
-    "sha256": "9f6fa4f19c05be8f2093d5b984cf3f763b4921af808bba2b74d048fcd981d827"
+    "sha256": "b3beb6513d426ba7879fb48849ff7ee309128343ee18834bc3bc6d5560d8d1d3"
   },
   {
     "path": "lib/l10n/copy.dart",
@@ -173,7 +173,7 @@
   },
   {
     "path": "lib/main.dart",
-    "sha256": "a057e3d29f967d4fb2ec1831ca6d09073f8fe37af23891cc0fbea610bcdbbb86"
+    "sha256": "d70482ce9456e0a105d3d72f897833117abc5c666d19b1ed847fc94ef2d14c69"
   },
   {
     "path": "lib/ui/app_theme.dart",
@@ -189,15 +189,15 @@
   },
   {
     "path": "test/controller_test.dart",
-    "sha256": "6b8aee261450ea89c63f8c8f68c326be617d1e2f19eb841667e19bfcdd5e4e30"
+    "sha256": "430d98789a69a398240de29a39958dc0f9ec92bd6a5b224936a8f496b512b949"
   },
   {
     "path": "test/fakes.dart",
-    "sha256": "1c19985005b82858c002918c1f4fdb6f8b46a2ab20578d2a527b5cda31d6afe2"
+    "sha256": "bc543920e05101f8c806886b5db9df51eeaed70d40b99b74728cde2eac1303a8"
   },
   {
     "path": "test/widget_test.dart",
-    "sha256": "e73676f7fcb0149b2965870974a296cc328f1b2f335bd74a056d145300dba400"
+    "sha256": "ba54cea60dfc2e0998a6bacce6178d18fbe87ae22b1358a89942550c791e3445"
   },
   {
     "path": "test_driver/capture.dart",
@@ -217,7 +217,7 @@
   },
   {
     "path": "tools/run_android_integration.sh",
-    "sha256": "38389749885f74e80696944dc398c4a1e9184c4aeb061f82b4501017bbb3c42d"
+    "sha256": "cd962c4bb4b820e48123ac60100be4ebb58ea81fd10f4447f2237e810741d588"
   },
   {
     "path": "web/favicon.svg",

@@ -56,16 +56,79 @@ void main() {
     expect(store.ids, isEmpty);
   });
 
-  test('failed writes retain the previous state and can be retried', () async {
+  test('failed writes retain state and require a successful reload', () async {
     await model.initialize();
     store.failSave = true;
     await model.setCompleted('alba', true);
     expect(model.completed, isEmpty);
     expect(model.storageError, isTrue);
     store.failSave = false;
+    await model.setCompleted('cedro', true);
+    expect(store.writes, 1);
+    await model.initialize();
     await model.setCompleted('alba', true);
     expect(model.completed, {'alba'});
     expect(model.storageError, isFalse);
+  });
+
+  test(
+    'an unacknowledged saved task survives the next edit after reload',
+    () async {
+      await model.initialize();
+      store.failAfterSave = true;
+      await model.setCompleted('alba', true);
+      expect(store.ids, {'alba'});
+      expect(model.completed, isEmpty);
+      expect(model.storageError, isTrue);
+      store.failAfterSave = false;
+      await model.setCompleted('cedro', true);
+      expect(store.writes, 1);
+      expect(store.ids, {'alba'});
+      await model.refresh();
+      await model.setCompleted('cedro', true);
+      expect(
+        store.writes,
+        1,
+      ); // Refreshing the catalog does not reread saved IDs.
+      await model.initialize();
+      expect(model.completed, {'alba'});
+      await model.setCompleted('cedro', true);
+      expect(store.ids, {'alba', 'cedro'});
+    },
+  );
+
+  test('a failed reload keeps unacknowledged writes protected', () async {
+    await model.initialize();
+    store.failAfterSave = true;
+    await model.setCompleted('alba', true);
+    store.failAfterSave = false;
+    store.failLoad = true;
+    await model.initialize();
+    expect(model.storageReady, isFalse);
+    await model.setCompleted('cedro', true);
+    expect(store.ids, {'alba'});
+    expect(store.writes, 1);
+    store.failLoad = false;
+    await model.initialize();
+    await model.setCompleted('cedro', true);
+    expect(store.ids, {'alba', 'cedro'});
+  });
+
+  test('edits stay blocked while saved status is being reread', () async {
+    await model.initialize();
+    store.failAfterSave = true;
+    await model.setCompleted('alba', true);
+    store.failAfterSave = false;
+    store.loadGate = Completer<void>();
+    final loading = model.initialize();
+    expect(model.storageReady, isFalse);
+    await model.setCompleted('cedro', true);
+    expect(store.writes, 1);
+    store.loadGate!.complete();
+    await loading;
+    expect(model.completed, {'alba'});
+    await model.setCompleted('cedro', true);
+    expect(store.ids, {'alba', 'cedro'});
   });
 
   test('a pending write disables another write until it completes', () async {

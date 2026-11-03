@@ -19,7 +19,7 @@ El proyecto muestra gestión asíncrona del estado, sustitución de peticiones, 
 4. Selecciona **Carga normal** para recuperar la actualización.
 5. Reinicia la app para comprobar que la tarea sigue completada.
 
-Si no se puede leer el estado guardado, los controles quedan deshabilitados y no se muestra un contador que dé por pendientes todas las tareas. Si no se puede confirmar una escritura, la pantalla conserva el último estado confirmado. **Recargar tareas** vuelve a leer lo guardado antes de repetir una acción. Las pruebas de controlador y widgets provocan estos fallos de forma controlada, sin dañar almacenamiento real.
+Si no se puede leer el estado guardado, los controles quedan deshabilitados y no se muestra un contador que dé por pendientes todas las tareas. Si no se puede confirmar una escritura, la pantalla conserva el último estado confirmado y bloquea cambios en lista y detalle. **Recargar tareas** debe releer correctamente lo guardado antes de permitir cambios; la operación fallida podría haberse guardado. Las pruebas de controlador y widgets provocan estos fallos de forma controlada, sin dañar almacenamiento real.
 
 ## Ejecutar
 
@@ -48,7 +48,7 @@ flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
 flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-El recorrido reinicia solo los IDs completados de esta demo, crea un controlador nuevo y deja una tarea ficticia completada. El driver opcional guarda los dos PNG en `docs/images/`. Ejecuta los comandos Flutter de build, test y drive en secuencia dentro de un mismo checkout: comparten archivos Android generados. Para comprobar el reinicio del proceso normal después de una build de integración, recompila o reinstala la entrada normal sin borrar preferencias; consulta [verificación](docs/VERIFICATION.md), en inglés.
+Los dos casos de integración reinician solo los IDs completados de esta demo, reconstruyen el controlador y dejan Alba y Cedro completadas. El segundo inyecta un error de confirmación después de una escritura real y comprueba bloqueo y recuperación mediante relectura. El driver opcional guarda los dos PNG en `docs/images/`. Ejecuta los comandos Flutter de build, test y drive en secuencia dentro de un mismo checkout: comparten archivos Android generados. `flutter test` desinstala la app de integración al terminar. Para conservar sus IDs al comprobar el reinicio del proceso normal, usa el comando `flutter drive --keep-app-running` anterior y reinstala el APK normal conservado sin borrar preferencias; consulta [verificación](docs/VERIFICATION.md), en inglés.
 
 ## Leer el código
 
@@ -64,7 +64,7 @@ El recorrido reinicia solo los IDs completados de esta demo, crea un controlador
 
 ## Comprobaciones y límites
 
-Hay **26 pruebas de controlador/widgets**: 17 del controlador y nueve de widgets, incluidas lectura/escritura fallidas y recuperación ES/EN a 360 × 800 con texto 1,8. [Verificación](docs/VERIFICATION.md) separa ejecuciones locales, persistencia nativa, navegador, auditoría de artefactos e intentos fallidos. El [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) comprueba Android/web y tiene un job de integración en API 35.
+Hay **31 pruebas de controlador/widgets**: 20 del controlador y 11 de widgets, incluidas lectura/escritura fallidas y recuperación ES/EN a 360 × 800 con texto 1,8. [Verificación](docs/VERIFICATION.md) separa ejecuciones locales, persistencia nativa, navegador, auditoría de artefactos e intentos fallidos. El [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) comprueba Android/web y tiene un job de integración en API 35.
 
 La exportación incluye Android y web. No se han validado iOS nativo ni dispositivos físicos. Release activa R8 y reducción de recursos, sin firma de producción ni publicación en tiendas. Las auditorías de artefactos son consultivas. Las pruebas de widgets/emulador no son una certificación formal de accesibilidad.
 

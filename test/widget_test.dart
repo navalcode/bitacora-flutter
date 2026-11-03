@@ -157,6 +157,15 @@ void main() {
         await tester.pumpAndSettle();
         expect(store.ids, isEmpty);
         expect(model.completed, isEmpty);
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        expect(
+          tester
+              .widget<FilledButton>(
+                find.byKey(const ValueKey('detail-complete')),
+              )
+              .onPressed,
+          isNull,
+        );
         final message = language == 'en'
             ? 'Saving could not be confirmed. Reload tasks before trying again.'
             : 'No se ha podido confirmar el guardado. Recarga las tareas antes de intentarlo de nuevo.';
@@ -176,6 +185,125 @@ void main() {
           find.text(language == 'en' ? 'Mark pending' : 'Marcar pendiente'),
           findsOneWidget,
         );
+        expect(tester.takeException(), isNull);
+      },
+    );
+
+    testWidgets(
+      '$language unconfirmed save blocks detail and list until reload',
+      (tester) async {
+        tester.view.physicalSize = const Size(360, 800);
+        tester.view.devicePixelRatio = 1;
+        tester.platformDispatcher.textScaleFactorTestValue = 1.8;
+        addTearDown(tester.view.resetPhysicalSize);
+        addTearDown(tester.view.resetDevicePixelRatio);
+        addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+        final store = MemoryStore()..failAfterSave = true;
+        final model = TaskController(ImmediateSource(), store);
+        await model.initialize();
+        await tester.pumpWidget(
+          BitacoraApp(
+            model: model,
+            environment: AppEnvironment.dev,
+            locale: Locale(language),
+          ),
+        );
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('task-alba')));
+        await showItem(
+          tester,
+          find.text(
+            language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+          ),
+          step: -150,
+        );
+        await tester.tap(
+          find.text(
+            language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+          ),
+        );
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        await tester.tap(find.byKey(const ValueKey('detail-complete')));
+        await tester.pumpAndSettle();
+        expect(store.ids, {'alba'});
+        expect(model.completed, isEmpty);
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        expect(
+          tester
+              .widget<FilledButton>(
+                find.byKey(const ValueKey('detail-complete')),
+              )
+              .onPressed,
+          isNull,
+        );
+        await tester.tap(find.byType(BackButton));
+        await tester.pumpAndSettle();
+        for (final id in ['alba', 'cedro']) {
+          await showItem(tester, find.byKey(ValueKey('complete-$id')));
+          expect(
+            tester
+                .widget<Checkbox>(find.byKey(ValueKey('complete-$id')))
+                .onChanged,
+            isNull,
+          );
+        }
+        expect(store.writes, 1);
+        store.failAfterSave = false;
+        final reload = language == 'en' ? 'Reload tasks' : 'Recargar tareas';
+        await showItem(tester, find.text(reload), step: -150);
+        await tester.tap(find.text(reload));
+        await tester.pumpAndSettle();
+        expect(model.completed, {'alba'});
+        await showItem(
+          tester,
+          find.byKey(const ValueKey('complete-alba')),
+          step: -150,
+        );
+        expect(
+          tester
+              .widget<Checkbox>(find.byKey(const ValueKey('complete-alba')))
+              .value,
+          isTrue,
+        );
+        expect(
+          tester
+              .widget<Checkbox>(find.byKey(const ValueKey('complete-alba')))
+              .onChanged,
+          isNotNull,
+        );
+        await showItem(
+          tester,
+          find.text(
+            language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+          ),
+          step: -150,
+        );
+        await tester.tap(
+          find.text(
+            language == 'en' ? 'Check Alba lookout' : 'Revisar el mirador Alba',
+          ),
+        );
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('detail-complete')));
+        expect(
+          find.text(language == 'en' ? 'Mark pending' : 'Marcar pendiente'),
+          findsOneWidget,
+        );
+        expect(
+          tester
+              .widget<FilledButton>(
+                find.byKey(const ValueKey('detail-complete')),
+              )
+              .onPressed,
+          isNotNull,
+        );
+        await tester.tap(find.byType(BackButton));
+        await tester.pumpAndSettle();
+        await showItem(tester, find.byKey(const ValueKey('complete-cedro')));
+        await tester.tap(find.byKey(const ValueKey('complete-cedro')));
+        await tester.pumpAndSettle();
+        expect(store.ids, {'alba', 'cedro'});
         expect(tester.takeException(), isNull);
       },
     );

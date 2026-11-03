@@ -19,7 +19,7 @@ The project shows asynchronous state, superseded requests, confirmed writes and 
 4. Choose **Normal loading** to recover.
 5. Restart the app to check that completion remains saved.
 
-If saved status cannot be read, completion controls stay disabled and the app does not show a guessed completion count. If a write cannot be confirmed, the screen keeps the last confirmed state. **Reload tasks** reads the saved status before another attempt. Controller and widget tests exercise these failures without damaging real storage.
+If saved status cannot be read, completion controls stay disabled and the app does not show a guessed completion count. If a write cannot be confirmed, the screen keeps the last confirmed state and disables changes in both the list and detail. **Reload tasks** must read saved status successfully before editing resumes; the failed operation may already have been saved. Controller and widget tests exercise these failures without damaging real storage.
 
 ## Run it
 
@@ -48,7 +48,7 @@ flutter test integration_test/app_test.dart --flavor dev -d DEVICE_ID
 flutter drive --driver test_driver/capture.dart --target integration_test/app_test.dart --dart-define=CAPTURE_SCREENSHOTS=true --flavor dev -d DEVICE_ID --keep-app-running
 ```
 
-The integration test resets only this demo’s completion IDs, recreates its controller and leaves one fictional task completed. The opt-in driver writes the two PNGs in `docs/images/`. Run Flutter build/test/drive commands sequentially in one checkout because they share generated Android files. For a normal-process restart check after an integration build, rebuild or reinstall the normal entry point without clearing its preferences; see [verification](docs/VERIFICATION.md).
+The two integration cases reset only this demo’s completion IDs, recreate the controller and leave Alba and Cedar completed. The second case injects a lost acknowledgement after an actual preferences write, then checks blocked edits and reload recovery. The opt-in driver writes the two PNGs in `docs/images/`. Run Flutter build/test/drive commands sequentially in one checkout because they share generated Android files. `flutter test` uninstalls the integration app during cleanup. To carry its saved IDs into a normal-process restart check, use the `flutter drive --keep-app-running` command above, then reinstall the retained normal APK without clearing preferences; see [verification](docs/VERIFICATION.md).
 
 ## Read the code
 
@@ -64,7 +64,7 @@ The integration test resets only this demo’s completion IDs, recreates its con
 
 ## Checks and limits
 
-There are **26 controller/widget tests**: 17 controller and nine widget cases, including English/Spanish read/write recovery at 360×800 with 1.8 text scaling. [Verification](docs/VERIFICATION.md) separates the latest local runs, native persistence, browser checks, artifact audits and any failed attempts. The [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) runs Android/web checks and a separate API 35 integration job.
+There are **31 controller/widget tests**: 20 controller and 11 widget cases, including English/Spanish read/write recovery at 360×800 with 1.8 text scaling. [Verification](docs/VERIFICATION.md) separates the latest local runs, native persistence, browser checks, artifact audits and any failed attempts. The [workflow](https://github.com/navalcode/bitacora-flutter/actions/workflows/checks.yml) runs Android/web checks and a separate API 35 integration job.
 
 The source export includes Android and web. Native iOS and physical devices have not been validated. Release enables R8/resource shrinking, but there is no production signing or store release. Artifact audits are advisory. Widget/emulator checks are not a formal accessibility certification.
 
