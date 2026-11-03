@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Two native cases, one invocation, no automatic retries. Diagnostics contain only the fictional CI app.
-# Connect directly to the VM: CI needs assertions, not the optional DDS debugging proxy.
+# The official integration driver uses a direct VM connection without the test command golden relay.
 set -euo pipefail
 serial="${1:?Pass the explicit emulator serial}"
 mkdir -p artifacts
@@ -8,7 +8,7 @@ adb -s "$serial" wait-for-device
 adb -s "$serial" shell input keyevent KEYCODE_WAKEUP
 adb -s "$serial" shell wm dismiss-keyguard
 set +e
-timeout --signal=TERM --kill-after=20s 8m flutter test integration_test/app_test.dart --flavor dev -d "$serial" --reporter expanded --timeout 6m --no-dds
+timeout --signal=TERM --kill-after=20s 8m flutter drive --driver test_driver/ci.dart --target integration_test/app_test.dart --flavor dev -d "$serial" --no-dds --timeout 360
 result=$?
 # Exclude info-level Flutter VM service messages and their temporary connection tokens.
 adb -s "$serial" logcat -d -v threadtime AndroidRuntime:E ActivityTaskManager:I flutter:E libc:F DEBUG:F tombstoned:E '*:S' > artifacts/android-runtime.log 2>&1

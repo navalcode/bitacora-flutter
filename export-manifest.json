@@ -129,7 +129,7 @@
   },
   {
     "path": "docs/VERIFICATION.md",
-    "sha256": "45929a8346b79c301fcc99707753452dfd81672f54ab8253a6b604b9137c9e3a"
+    "sha256": "ba42e0b4d7d0a634cc2e15f65537160c7d7d7bf9c6100d8e20c3bbc7c1305e6b"
   },
   {
     "path": "docs/images/board.png",
@@ -204,6 +204,10 @@
     "sha256": "93b6ca910e4004007457d1618241968451bc4432cc35f20b9f25e1e622ab2b51"
   },
   {
+    "path": "test_driver/ci.dart",
+    "sha256": "36a556632cc5558e93933f378d49a7d8bcd45f75f7425eec1b732dbb2a9e3772"
+  },
+  {
     "path": "third_party/flutter-LICENSE.txt",
     "sha256": "a598db94b6290ffbe10b5ecf911057b6a943351c727fdda9e5f2891d68700a20"
   },
@@ -217,7 +221,7 @@
   },
   {
     "path": "tools/run_android_integration.sh",
-    "sha256": "f26de06afdc09ca2479d14b8e7a07e6b605c29ef23beac1ea61691dcf641e1b7"
+    "sha256": "3976c92644e0a093aa428572f69c07d1cfb9cf40cf9d96c420cc897ff4bda0b1"
   },
   {
     "path": "web/favicon.svg",
