@@ -37,6 +37,8 @@ flutter build web --dart-define=APP_ENV=dev --no-web-resources-cdn --pwa-strateg
 
 Los flavors `dev` y `prod` son demos. En Android tienen IDs y nombres de lanzador distintos, por lo que su almacenamiento es independiente. Ambos usan `lib/main.dart`. En web, `APP_ENV` selecciona la etiqueta del entorno, sin conectar un servicio real. Un nombre desconocido falla de forma explícita. Para generar un AAB: `flutter build appbundle --release --flavor prod`.
 
+El wrapper Android fija Gradle 8.14.6 con SHA-256 de la distribución; AGP 8.11.1 y Kotlin 2.2.20 conservan sus versiones.
+
 Flutter puede elegir el JDK de Android Studio antes que `JAVA_HOME`. Configura JDK 17 para este proyecto con propiedades locales de Gradle o `GRADLE_OPTS=-Dorg.gradle.java.home=/ruta/a/jdk-17`. No incluyas rutas locales ni claves de firma en Git. No hay firma de producción configurada.
 
 ## Prueba nativa y capturas

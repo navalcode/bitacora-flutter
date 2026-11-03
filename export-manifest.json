@@ -1,7 +1,7 @@
 [
   {
     "path": ".github/workflows/checks.yml",
-    "sha256": "6b7c0b9a836dff906a97bb1da54a49b244d5b99ddeb7ed1d4eae8a8bd4945113"
+    "sha256": "152adedf6dc044e0f7fdd9750f28828bd5f4f39b8a58acca57e6739d1024a788"
   },
   {
     "path": ".gitignore",
@@ -17,15 +17,15 @@
   },
   {
     "path": "README.es.md",
-    "sha256": "9712190b894d35b5044b09c62e15c478b89b3ace8b0f17a2f99a59d33bd3ae94"
+    "sha256": "792811247a208957d035a2d9c8bbec0bb7a0da9420ad905de775e1e4800a5ea1"
   },
   {
     "path": "README.md",
-    "sha256": "3e19f5a32d9160f4c0c92ec149dd87e6edd396b7bc02ec7a897ac4980f69dc98"
+    "sha256": "428d1d109ac6fd1f9d5293f3aba6f677d7f78005d13f4ba4b26ee1237650b4c7"
   },
   {
     "path": "THIRD_PARTY.md",
-    "sha256": "eb989da6c1c9f86a3b1310b0856d5216f876b91c3f7e2f0bcb3a0dc3d27700a5"
+    "sha256": "399d47fe6db731123fb3a9b9c30e8d3c4d9807e2d9ed8a5abc9d8db8b0f44e46"
   },
   {
     "path": "analysis_options.yaml",
@@ -81,11 +81,11 @@
   },
   {
     "path": "android/gradle/wrapper/gradle-wrapper.jar",
-    "sha256": "16caeaf66d57a0d1d2087fef6a97efa62de8da69afa5b908f40db35afc4342da"
+    "sha256": "ad16bca46cb71bb5887c546860d93992aeee35c1fdaf4a242b0a612375d937e0"
   },
   {
     "path": "android/gradle/wrapper/gradle-wrapper.properties",
-    "sha256": "5b796f11dabad5ddfffbf00a05ba1f55397415b52d896d80113a191519a19cff"
+    "sha256": "3faaa391982b3d0510194bb8bd9d1bb0f250874eaf246f465288d9f90ff037f9"
   },
   {
     "path": "android/gradle.properties",
@@ -93,11 +93,11 @@
   },
   {
     "path": "android/gradlew",
-    "sha256": "ec56c02543666d92d9ac5ae7fcc48f88ce4de0deb8b7f9b39928ca46f68c1b2b"
+    "sha256": "b187b4c52e749f5760afdd6fadc31b2a98ad35fb249bf0dff03b72650f320409"
   },
   {
     "path": "android/gradlew.bat",
-    "sha256": "c13c6e91b9a517783976de213d46398c661ea9e17651376d7301e839eaedcc62"
+    "sha256": "1d297e00bd21de3ace22b4d7f2de1f9dfa858883d66bbf7c1ccbecccec8f4f3b"
   },
   {
     "path": "android/settings.gradle.kts",
@@ -129,7 +129,7 @@
   },
   {
     "path": "docs/VERIFICATION.md",
-    "sha256": "047ef6b063cc750c6ca717fd8b743abacb91080f414e0897e7f3ae9b8a0d1f98"
+    "sha256": "6b9b5593e362473c6bdba3195a91ec7a5442e0c22b70346af757916c67213c27"
   },
   {
     "path": "docs/images/board.png",

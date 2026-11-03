@@ -1,5 +1,27 @@
 # Verification record
 
+## Gradle patch and cache ownership · 3 November 2026
+
+Both wrappers now use Gradle 8.14.6. The distribution and wrapper JAR were checked against official SHA-256 values, and the wrapper was generated from that verified distribution. The patch includes fixes described in the [Gradle release notes](https://docs.gradle.org/8.14.6/release-notes.html). JDK 17, SDK 36, plugin/dependency versions and application source are unchanged.
+
+The device job reads the basic Gradle cache; only the build/checks job may save it on the default branch. This avoids competing writes to the same key. No caches were deleted. The Gradle action still reports Gradle 8 as behind Gradle 9 because its support classifier compares major versions. That notice is retained; a major upgrade needs a separate Kotlin/AGP/Flutter compatibility review.
+
+Actionlint 1.7.12 passes with a local label allowlist for the official `ubuntu-26.04` image, absent from that linter's built-in list. The initial unknown-label diagnostics were retained. ShellCheck was unavailable; shell commands are unchanged. Rumbo pins the Ubuntu 26.04 image observed in its preceding run; Flutter retains Ubuntu 24.04. Both labels are listed in [runner-images](https://github.com/actions/runner-images).
+
+Local validation passes locked dependency resolution, analyzer and **31 controller/widget tests**, plus dev debug APK, prod optimized release APK and prod release AAB. The checked-in Android wrapper scripts now match the verified distribution's generated scripts byte for byte, retaining upstream licensing and Windows line endings.
+
+Advisory audits report **13.53 MB DEX** in debug and **0.95 MB** in optimized APK/AAB. Both AAB R8 options and stats were read directly from the ZIP: the complements of no-shrinking / no-optimization / no-obfuscation match **87.27% / 86.44% / 89.19%** in the tool report. These metrics cover Android DEX, not Flutter's Dart AOT code.
+
+All six local packages pass the advisory ELF/ZIP 16 KB checks. APKs lack percentage R8 metadata; the AAB ZIP-alignment result has no split entries and does not measure Play-generated APKs. The percentages above are metadata-derived, not runtime performance, whole-app reduction or store certification. No new local device or release-runtime test is attributed to this patch. Earlier device results below retain their historical scope.
+
+Local artifact SHA-256:
+
+- flutter-debug: `fece5158fec76d204ab1e0cbac37feee9fcee21ad6c92e804a78b1be0ffaa12e`.
+- flutter-release: `cbbb9d99883c901a90bbe66832ec48e2ca99c4fe84843c711ef6fdb4bbb8ea85`.
+- flutter-bundle: `ca6bbc5897fd1ad6a9cde305a9e3865ca79026b42d62afe9cf576c805d1b7c72`.
+
+Hosted verification for this patch is pending; the previous CI action-maintenance runs below do not validate these new wrapper bytes.
+
 ## CI action runtime maintenance · 3 November 2026
 
 The workflow pins maintained releases of checkout, Java setup, artifact upload, Gradle setup and Android setup by full commit SHA. Their JavaScript runtime is Node 24; this does not change the app's JDK 17, SDK 36, dependency versions or test commands. Flutter setup and the emulator action keep their existing reviewed commits.
