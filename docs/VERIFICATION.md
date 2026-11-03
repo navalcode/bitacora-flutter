@@ -6,7 +6,9 @@ The workflow pins maintained releases of checkout, Java setup, artifact upload, 
 
 `setup-gradle` uses `cache-provider: basic`, retaining GitHub Actions caching instead of selecting the new enhanced provider. `setup-android` explicitly retains command-line tools archive `12266719`, which was the previous action's implicit default. Events, read-only contents permission, disabled credential persistence, runners, timeouts and artifact retention are unchanged.
 
-Local validation: actionlint 1.7.12 and a byte-for-byte comparison after reversing only the reviewed pins and explicit cache/SDK inputs. ShellCheck was unavailable; existing shell commands are unchanged. This validates workflow configuration, not a new hosted build. Follow the repository's current Actions run for hosted results; earlier app/runtime records below retain their original scope.
+Local validation: actionlint 1.7.12 and a byte-for-byte comparison after reversing only the reviewed pins and explicit cache/SDK inputs. ShellCheck was unavailable; existing shell commands are unchanged. Hosted verification: [run 41609179804](https://github.com/navalcode/bitacora-flutter/actions/runs/41609179804) succeeded at `eae2881` in both jobs (Android/web checks and API 35 emulator). Logs contain the reviewed action pins and no Node.js 20/setup-java v4 deprecation warning. Earlier app/runtime records below retain their original scope.
+
+Remaining annotations concern Gradle 8.14.3 maintenance, a basic-cache save reservation race between jobs. Both jobs succeeded; a cache save warning does not change their test/build result. Gradle compatibility and cache ownership require a separate reviewed maintenance increment. The workflow uploads reports/diagnostics rather than APK/AAB files; earlier local artifact audits below are not audits of these cloud outputs.
 
 ## Unconfirmed write recovery · 3 November 2026
 
